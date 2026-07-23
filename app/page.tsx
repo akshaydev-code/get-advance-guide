@@ -1,4 +1,7 @@
 import Image from "next/image";
+
+import Header from "@/components/MaxWidthWrapper/common/Header/page";
+
 import {
   ArrowRight,
   ChevronRight,
@@ -68,75 +71,8 @@ const categories = [
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#f8f8fc] text-[#111827] overflow-hidden">
-      {/* NAVBAR */}
-      <nav className="w-full border-b border-[#ececf3] bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-400 to-blue-600 flex items-center justify-center text-white font-bold text-xl">
-              AG
-            </div>
-
-            <h1 className="text-2xl font-bold">
-              GetAdvance<span className="text-violet-600">Guide</span>
-            </h1>
-          </div>
-
-          <ul className="hidden lg:flex items-center gap-10 font-medium text-sm">
-            <li>
-              <a
-                href="/home"
-                className="text-violet-600 border-b-2 border-violet-600 pb-2"
-              >
-                Home
-              </a>
-            </li>
-
-            <li>
-              <a href="/mentors" className="hover:text-violet-600 transition">
-                Mentors
-              </a>
-            </li>
-
-            <li>
-              <a href="/how-it-works" className="hover:text-violet-600 transition">
-                How It Works
-              </a>
-            </li>
-
-            <li>
-              <a href="/resources" className="hover:text-violet-600 transition">
-                Resources
-              </a>
-            </li>
-
-            <li>
-              <a href="/about-us" className="hover:text-violet-600 transition">
-                About Us
-              </a>
-            </li>
-
-            <li>
-              <a href="/contact" className="hover:text-violet-600 transition">
-                Contact
-              </a>
-            </li>
-          </ul>
-
-          <div className="flex items-center gap-4">
-            <a href="/login">
-              <button className="border border-violet-300 text-violet-600 px-6 py-3 rounded-xl font-semibold hover:bg-violet-50 transition-all">
-                Login
-              </button>
-            </a>
-
-            <a href="/signup">
-              <button className="bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-semibold transition-all">
-                Sign Up
-              </button>
-            </a>
-          </div>
-        </div>
-      </nav>
+      {/* HEADER */}
+      <Header />
 
       {/* HERO */}
       <section className="max-w-7xl mx-auto px-6 pt-20 pb-16 grid lg:grid-cols-2 gap-16 items-center">
