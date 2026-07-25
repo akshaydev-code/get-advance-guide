@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+:root {
+  --main-color: #663ADB;
+}
+
+@theme inline {
+  --color-primary: var(--main-color);
+}

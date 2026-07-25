@@ -81,49 +81,6 @@ const mentors = [
 export default function MentorsPage() {
   return (
     <main className="min-h-screen bg-[#f8f8fc] text-[#111827] overflow-hidden">
-      {/* NAVBAR */}
-      <nav className="w-full bg-white border-b border-[#ececf3]">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-400 to-blue-600 flex items-center justify-center text-white font-bold">
-              AG
-            </div>
-
-            <h1 className="text-2xl font-bold">
-              GetAdvance<span className="text-violet-600">Guide</span>
-            </h1>
-          </div>
-
-          <ul className="hidden lg:flex items-center gap-10 font-medium">
-            <li>Home</li>
-
-            <li className="text-violet-600 border-b-2 border-violet-600 pb-2">
-              Mentors
-            </li>
-
-            <li>How It Works</li>
-
-            <li className="flex items-center gap-1">
-              Resources
-              <ChevronDown size={16} />
-            </li>
-
-            <li>About Us</li>
-            <li>Contact</li>
-          </ul>
-
-          <div className="flex items-center gap-4">
-            <button className="border border-violet-300 text-violet-700 px-7 py-3 rounded-xl font-semibold">
-              Log In
-            </button>
-
-            <button className="bg-violet-600 hover:bg-violet-700 transition-all text-white px-7 py-3 rounded-xl font-semibold">
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </nav>
-
       {/* HERO */}
       <section className="bg-[#f5f3ff]">
         <div className="max-w-7xl mx-auto px-6 pt-14 pb-10 grid lg:grid-cols-2 gap-10 items-center">

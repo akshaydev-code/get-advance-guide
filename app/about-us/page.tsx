@@ -11,10 +11,7 @@ import {
 } from "lucide-react";
 
 import {
-    FaFacebookF,
-    FaInstagram,
     FaLinkedinIn,
-    FaTwitter,
 } from "react-icons/fa";
 
 const teamMembers = [
@@ -51,44 +48,6 @@ const teamMembers = [
 export default function AboutPage() {
     return (
         <main className="min-h-screen bg-[#f8f8fc] text-[#111827] overflow-hidden">
-            {/* NAVBAR */}
-            <nav className="w-full border-b border-[#ececf3] bg-white">
-                <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-400 to-blue-600 flex items-center justify-center text-white font-bold">
-                            AG
-                        </div>
-
-                        <h1 className="text-2xl font-bold">
-                            GetAdvance<span className="text-violet-600">Guide</span>
-                        </h1>
-                    </div>
-
-                    <ul className="hidden lg:flex items-center gap-10 font-medium">
-                        <li>Home</li>
-                        <li>Mentors</li>
-                        <li>How It Works</li>
-                        <li>Resources</li>
-
-                        <li className="text-violet-600 border-b-2 border-violet-600 pb-2">
-                            About Us
-                        </li>
-
-                        <li>Contact</li>
-                    </ul>
-
-                    <div className="flex items-center gap-4">
-                        <button className="border border-violet-300 text-violet-700 px-7 py-3 rounded-xl font-semibold">
-                            Log In
-                        </button>
-
-                        <button className="bg-violet-600 hover:bg-violet-700 transition-all text-white px-7 py-3 rounded-xl font-semibold">
-                            Sign Up
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
             {/* HERO */}
             <section className="max-w-7xl mx-auto px-6 pt-16">
                 <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -307,82 +266,6 @@ export default function AboutPage() {
                     ))}
                 </div>
             </section>
-
-            {/* FOOTER */}
-            <footer className="bg-gradient-to-r from-violet-800 to-violet-500 text-white">
-                <div className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-5 gap-10">
-                    <div>
-                        <h2 className="text-3xl font-bold mb-6">
-                            GetAdvanceGuide
-                        </h2>
-
-                        <p className="leading-8 text-violet-100">
-                            Empowering students and professionals by connecting them
-                            with the right mentors for guidance, growth, and success.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-xl mb-5">
-                            Quick Links
-                        </h3>
-
-                        <ul className="space-y-3 text-violet-100">
-                            <li>Home</li>
-                            <li>Mentors</li>
-                            <li>How It Works</li>
-                            <li>About Us</li>
-                            <li>Contact</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-xl mb-5">
-                            Resources
-                        </h3>
-
-                        <ul className="space-y-3 text-violet-100">
-                            <li>Blog</li>
-                            <li>Guides</li>
-                            <li>FAQs</li>
-                            <li>Help Center</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-xl mb-5">
-                            Legal
-                        </h3>
-
-                        <ul className="space-y-3 text-violet-100">
-                            <li>Privacy Policy</li>
-                            <li>Terms of Service</li>
-                            <li>Refund Policy</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-bold text-xl mb-5">
-                            Follow Us
-                        </h3>
-
-                        <div className="flex items-center gap-4">
-                            {["F", "T", "in", "I"].map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="w-12 h-12 rounded-full bg-white text-violet-600 flex items-center justify-center font-bold"
-                                >
-                                    {item}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="border-t border-violet-400/30 py-6 text-center text-violet-100">
-                    © 2024 GetAdvanceGuide. All rights reserved.
-                </div>
-            </footer>
         </main>
     );
 }
