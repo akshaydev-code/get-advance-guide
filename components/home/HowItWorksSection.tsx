@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from 'react';
-import { UserPlus, SearchCheck, Send, CircleCheckBig, MoveRight } from 'lucide-react';
 import Image from 'next/image';
-
+import MaxWidthWrapper from '../common/MaxWidthWrapper/MaxWidthWrapper';
+import { BiSolidRightArrow } from "react-icons/bi";
+import { RiStarSLine } from 'react-icons/ri';
 import {
     Code2,
     Database,
@@ -12,10 +13,12 @@ import {
     Briefcase,
     GraduationCap,
     ChevronRight,
-    ArrowRight,
-    Star
+    Star,
+    UserPlus,
+    SearchCheck,
+    Send,
+    CircleCheckBig
 } from 'lucide-react';
-import MaxWidthWrapper from '../common/MaxWidthWrapper/MaxWidthWrapper';
 
 const categories = [
     { name: "Web Development", icon: Code2 },
@@ -28,40 +31,40 @@ const categories = [
 
 const mentorsData = [
     {
-        name: "Arjun Sharma",
+        name: "Anubhav Mittal",
         role: "Full Stack Developer",
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=500", // replace with actual photo
+        image: "https://res.cloudinary.com/dkbelrldw/image/upload/v1785059102/HomeMentorImage_9_c0qrmh.webp",
         skills: ["React", "Node.js", "MongoDB"],
         rating: 4.9,
-        reviews: 120,
+        reviews: 111,
         exp: "5+ years",
     },
     {
-        name: "Priya Verma",
+        name: "Chitrakshi Verma",
         role: "Data Scientist",
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=500",
+        image: "https://res.cloudinary.com/dkbelrldw/image/upload/v1785059110/HomeMentorImage_6_vmrjbo.webp",
         skills: ["Python", "ML", "AI"],
         rating: 4.8,
-        reviews: 98,
-        exp: "4+ years",
+        reviews: 96,
+        exp: "2+ years",
     },
     {
-        name: "Rahul Mehta",
+        name: "Gitakshi Sharma",
         role: "Product Designer",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=500",
+        image: "https://res.cloudinary.com/dkbelrldw/image/upload/v1785059105/HomeMentorImage_8_mgrhux.webp",
         skills: ["UI/UX", "Figma", "Adobe XD"],
         rating: 4.9,
-        reviews: 110,
+        reviews: 143,
         exp: "6+ years",
     },
     {
-        name: "Neha Kapoor",
+        name: "Akshika G",
         role: "Career Coach",
-        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=500",
+        image: "https://res.cloudinary.com/dkbelrldw/image/upload/v1785059111/HomeMentorImage_2_qrjsff.webp",
         skills: ["Resume", "Interview", "Growth"],
         rating: 4.8,
-        reviews: 87,
-        exp: "7+ years",
+        reviews: 79,
+        exp: "6+ years",
     },
 ];
 
@@ -92,62 +95,69 @@ const HowItWorksSection = () => {
     const [selectedCategory, setSelectedCategory] = useState(0);
 
     return (
-        <MaxWidthWrapper>
-            <section className="py-12">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <span className="bg-[#f0ebff] text-[#635bff] px-4 py-1.5 rounded-full font-semibold text-[11px] tracking-wider uppercase">
+        <div id="Find-a-mentor" className="py-16 scroll-mt-6">
+            <MaxWidthWrapper>
+                {/* Heading & Label */}
+                <div className="text-center mb-6">
+                    {/* Label */}
+                    <div className="flex items-center justify-center w-fit mx-auto gap-2 bg-violet-50 text-violet-600 px-4 py-1 rounded-full text-[11px] font-semibold uppercase">
+                        <RiStarSLine size={16} />
                         Simple Process
-                    </span>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-3">
-                        How <span className="text-[#635bff]">GetAdvanceGuide</span> Works
+                    </div>
+
+                    {/* Heading */}
+                    <h2 className="text-[27px] font-bold text-[#000000] mt-3">
+                        How <span className="text-violet-600">GetAdvanceGuide</span> Works
                     </h2>
                 </div>
 
-                {/* Steps Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
+                {/* Steps */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 mb-6">
                     {steps.map((step, index) => {
                         const Icon = step.icon;
-                        return (
-                            <div key={index} className="flex flex-col items-center text-center relative group">
 
-                                {/* Dotted Arrow Connector (Hidden on last item & mobile) */}
+                        return (
+                            <div key={index} className="relative group flex flex-col items-center text-center">
+
+                                {/* Arrow Dotted Line */}
                                 {index < steps.length - 1 && (
-                                    <div className="hidden md:flex items-center absolute top-9 left-[calc(50%+40px)] w-[calc(100%-80px)] z-0">
+                                    <div className="absolute hidden md:flex items-center top-9 left-[calc(50%+79px)] w-[calc(50%-22px)] z-0">
                                         <div className="w-full border-t-2 border-dotted border-violet-200"></div>
-                                        <MoveRight className="w-3.5 h-3.5 text-violet-300 -ml-1 shrink-0" />
+                                        <ChevronRight className="w-4 h-4 stroke-[3.2] text-violet-600 -ml-1 shrink-0" />
                                     </div>
                                 )}
 
-                                {/* Icon Circle with Overlapping Badge */}
+                                {/* Step Circles */}
                                 <div className="relative mb-5 z-10">
-                                    <div className="w-20 h-20 rounded-full bg-[#f2efff] text-[#635bff] flex items-center justify-center shadow-sm">
-                                        <Icon className="w-8 h-8 stroke-[1.8]" />
+                                    <div className="w-22 h-22 rounded-full bg-violet-50 text-violet-600 flex items-center justify-center">
+                                        <Icon className="w-9 h-9 stroke-[2.2]" />
                                     </div>
-                                    {/* Number Badge Overlapping */}
-                                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#635bff] text-white text-[12px] font-bold rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+
+                                    <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-6 h-6 bg-violet-600 text-white text-[11px] font-semibold rounded-full flex items-center justify-center">
                                         {index + 1}
                                     </div>
                                 </div>
 
-                                {/* Text Content */}
-                                <h3 className="text-[15px] font-bold text-gray-900 mb-1.5">{step.title}</h3>
-                                <p className="text-[#6c727f] text-[12px] leading-relaxed max-w-[210px]">
+                                {/* Title */}
+                                <h3 className="text-[15px] font-semibold text-[#000000] mb-1">{step.title}</h3>
+
+                                {/* Description */}
+                                <p className="text-[#000000]/60 text-[11px] max-w-[155px]">
                                     {step.desc}
                                 </p>
                             </div>
                         );
                     })}
                 </div>
-            </section>
 
-            <section>
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Categories & Mentors */}
+                <div  className="flex flex-col md:flex-row gap-12 items-start justify-start">
+                    {/* LEFT */}
+                    <div className="w-full md:w-[43%] lg:w-[31%]">
+                        {/* Heading */}
+                        <h2 className="text-[18px] lg:text-[22px] font-semibold text-[#000000] mb-4 text-center md:text-left">Top Categories</h2>
 
-                    {/* LEFT COLUMN: Top Categories */}
-                    <div className="lg:col-span-4 xl:col-span-3">
-                        <h2 className="text-xl font-bold text-gray-900 mb-5">Top Categories</h2>
-
+                        {/* Top Categories */}
                         <div className="space-y-2">
                             {categories.map((cat, index) => {
                                 const Icon = cat.icon;
@@ -157,45 +167,50 @@ const HowItWorksSection = () => {
                                     <div
                                         key={index}
                                         onClick={() => setSelectedCategory(index)}
-                                        className={`flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all ${isActive
-                                            ? "bg-[#f2efff] text-[#635bff] font-semibold border-l-4 border-[#635bff]"
-                                            : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                        className={`group flex items-center justify-between px-4 py-3 rounded-[11px] cursor-pointer transition-all duration-100 ${isActive
+                                            ? "bg-violet-50 text-violet-600 font-semibold border-l-4 border-violet-600"
+                                            : "bg-white text-[#000000]/60 hover:text-[#000000]"
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Icon className={`w-4 h-4 ${isActive ? "text-[#635bff]" : "text-gray-400"}`} />
-                                            <span className="text-[13px]">{cat.name}</span>
+                                            <Icon className={`w-4 h-4 ${isActive ? "text-violet-600" : "text-[#000000]/60 group-hover:text-[#000000]"}`} />
+                                            <span className="text-[11px] lg:text-[12px]">{cat.name}</span>
                                         </div>
-                                        <ChevronRight className={`w-4 h-4 ${isActive ? "text-[#635bff]" : "text-gray-300"}`} />
+
+                                        <ChevronRight className={`w-4 h-4 ${isActive ? "text-violet-600" : "text-[#000000]/60 group-hover:text-[#000000]"}`} />
                                     </div>
                                 );
                             })}
                         </div>
 
-                        <button className="mt-5 text-[#635bff] hover:text-violet-800 text-[13px] font-semibold flex items-center gap-2 transition-colors">
+                        {/* View All Button */}
+                        <button className="mt-4 text-violet-600 hover:text-violet-800 text-[11px] lg:text-[12px] font-semibold flex items-center gap-1 hover:translate-x-2 transition-all duration-500 cursor-pointer mx-auto md:mx-0">
                             <span>View All Categories</span>
-                            <ArrowRight size={14} />
+                            <BiSolidRightArrow size={9} />
                         </button>
                     </div>
 
-                    {/* RIGHT COLUMN: Popular Mentors */}
-                    <div className="lg:col-span-8 xl:col-span-9">
-                        <div className="flex items-center justify-between mb-5">
-                            <h2 className="text-xl font-bold text-gray-900">Popular Mentors</h2>
-                            <button className="text-[#635bff] hover:text-violet-800 text-[13px] font-semibold transition-colors">
+                    {/* RIGHT */}
+                    <div className="w-full">
+                        {/* Heading */}
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-[18px] lg:text-[22px] font-semibold text-[#000000]">Popular Mentors</h2>
+                            <button className="text-violet-600 hover:text-violet-800 text-[11px] lg:text-[12px] font-semibold flex items-center gap-1 hover:translate-x-2 transition-all duration-500 cursor-pointer">
                                 View All Mentors
+                                <BiSolidRightArrow size={9} />
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                        {/* Popular Mentors */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {mentorsData.map((mentor, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                                    className="bg-white rounded-[11px] overflow-hidden border border-violet-100 transition-all duration-300 flex flex-col justify-between"
                                 >
-                                    <div>
-                                        {/* Image Container */}
-                                        <div className="relative w-full h-44 bg-gray-100">
+                                    <div className='pb-4'>
+                                        {/* Image */}
+                                        <div className="relative w-full h-54 md:h-31">
                                             <Image
                                                 src={mentor.image}
                                                 alt={mentor.name}
@@ -204,53 +219,57 @@ const HowItWorksSection = () => {
                                             />
                                         </div>
 
-                                        {/* Body Content */}
-                                        <div className="p-4">
-                                            <h3 className="text-[14px] font-bold text-gray-900 leading-tight">{mentor.name}</h3>
-                                            <p className="text-[11px] text-gray-500 mb-3">{mentor.role}</p>
+                                        {/* Details */}
+                                        <div className="pt-4 px-4">
+                                            {/* Name */}
+                                            <h3 className="text-[14px] lg:text-[16px] font-semibold text-[#00000] tracking-wide mb-1">{mentor.name}</h3>
 
-                                            {/* Skill Badges */}
-                                            <div className="flex flex-wrap gap-1.5 mb-4">
+                                            {/* Role */}
+                                            <p className="text-[11px] lg:text-[12px] text-[#000000]/60 mb-3">{mentor.role}</p>
+
+                                            {/* Skills */}
+                                            <div className="flex flex-wrap gap-1 mb-4">
                                                 {mentor.skills.map((skill, idx) => (
                                                     <span
                                                         key={idx}
-                                                        className="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-md font-medium"
+                                                        className="bg-violet-50 text-violet-600 text-[8px] px-2 py-1 rounded-[3px] font-medium"
                                                     >
                                                         {skill}
                                                     </span>
                                                 ))}
                                             </div>
 
-                                            {/* Rating & Exp Info */}
-                                            <div className="flex items-center justify-between text-[11px] text-gray-500 mb-4">
-                                                <div className="flex items-center gap-1 font-semibold text-gray-900">
-                                                    <Star size={12} className="fill-amber-400 text-amber-400" />
+                                            {/* Rating & Experience Info */}
+                                            <div className="flex flex-col md:flex-row gap-2 md:gap-0 md:items-center md:justify-between text-[11px] mb-4">
+                                                {/* Rating */}
+                                                <div className="flex items-center gap-1 font-semibold text-[#000000]">
+                                                    <Star size={12} className="fill-yellow-400 text-yellow-400" />
                                                     <span>{mentor.rating}</span>
-                                                    <span className="text-gray-400 font-normal">({mentor.reviews})</span>
+                                                    <span className="text-[#000000]/40 font-normal tracking-wide">({mentor.reviews})</span>
                                                 </div>
-                                                <div className="flex items-center gap-1 text-gray-400">
-                                                    <span>•</span>
-                                                    <span>{mentor.exp}</span>
+
+                                                {/* Experience */}
+                                                <div className="flex items-center gap-1">
+                                                    <span className="text-violet-600 text-[15px]">•</span>
+                                                    <span className="text-[#000000]/60 font-medium">{mentor.exp}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* View Profile Button */}
-                                    <div className="px-4 pb-4">
-                                        <button className="w-full py-2 rounded-xl bg-[#f2efff] text-[#635bff] hover:bg-[#635bff] hover:text-white font-medium text-[12px] transition-all">
-                                            View Profile
-                                        </button>
+                                        {/* View Profile Button */}
+                                        <div className="px-4">
+                                            <button className="w-full py-2 rounded-[11px] bg-violet-50 text-violet-600 hover:bg-violet-600 hover:text-white font-medium text-[11px] lg:text-[12px] cursor-pointer transition-all duration-400">
+                                                View Profile
+                                            </button>
+                                        </div>
                                     </div>
-
                                 </div>
                             ))}
                         </div>
                     </div>
-
                 </div>
-            </section>
-        </MaxWidthWrapper>
+            </MaxWidthWrapper>
+        </div>
     );
 };
 

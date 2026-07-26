@@ -6,7 +6,7 @@ const MaxWidthWrapper: React.FC<{
 }> = ({ className, children }) => {
   return (
     <section
-      className={`${className} mx-auto box-border w-[95%] lg:w-[90%] xl:w-[83%]`}
+      className={`${className} mx-auto box-border w-[85%]`}
     >
       {children}
     </section>

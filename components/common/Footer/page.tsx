@@ -5,12 +5,12 @@ import MaxWidthWrapper from '../MaxWidthWrapper/MaxWidthWrapper';
 
 const Footer = () => {
     return (
-        <footer className="bg-white py-12 text-[#5e6475]">
-            <MaxWidthWrapper className="flex justify-between">
+        <footer className="bg-violet-50 lg:bg-white mt-6 lg:mt-0 py-8 lg:py-12 text-[#5e6475]">
+            <MaxWidthWrapper className="flex flex-col lg:flex-row justify-between space-y-4">
                 {/* Brand Column */}
-                <div className="max-w-75 space-y-3">
+                <div className="lg:max-w-75 space-y-3">
                     {/* Logo */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center lg:justify-start gap-2">
                         <Image
                             src="https://res.cloudinary.com/dkbelrldw/image/upload/v1784991234/LogoFull_jcmc4x.png"
                             alt="GetAdvanceGuide Logo"
@@ -24,50 +24,52 @@ const Footer = () => {
                     </div>
 
                     {/* Description */}
-                    <p className="text-[#000000]/70 text-[12px]">
+                    <p className="text-[#000000]/70 text-[12px] text-center lg:text-left w-[60%] mx-auto lg:w-full lg:mx-0">
                         Empowering students and professionals by connecting them with the right mentors for guidance, growth, and success.
                     </p>
                 </div>
 
-                {/* Quick Links */}
-                <div>
-                    <h3 className="font-semibold text-[#000000] text-[14px] mb-3">Quick Links</h3>
-                    <ul className="space-y-2 text-[#000000]/70 text-[12px]">
-                        <li><Link href="/" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Home</Link></li>
-                        <li><Link href="/about-us" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">About Us</Link></li>
-                        <li><Link href="/how-it-works" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">How It Works</Link></li>
-                        <li><Link href="/mentors" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Mentors</Link></li>
-                        <li><Link href="/contact" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Contact Us</Link></li>
-                    </ul>
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 mx-auto gap-6 md:gap-31 lg:mx-0 lg:gap-18 lg:grid-none">
+                    {/* Quick Links */}
+                    <div>
+                        <h3 className="font-semibold text-[#000000] text-[14px] mb-3 text-center md:text-left">Quick Links</h3>
+                        <ul className="space-y-2 text-[#000000]/70 text-[12px] text-center md:text-left">
+                            <li><Link href="/" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Home</Link></li>
+                            <li><Link href="/about-us" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">About Us</Link></li>
+                            <li><Link href="/how-it-works" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">How It Works</Link></li>
+                            <li><Link href="/mentors" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Mentors</Link></li>
+                            <li><Link href="/contact" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Contact Us</Link></li>
+                        </ul>
+                    </div>
 
-                {/* Resources */}
-                <div>
-                    <h3 className="font-semibold text-[#000000] text-[14px] mb-3">Resources</h3>
-                    <ul className="space-y-2 text-[#000000]/70 text-[12px]">
-                        <li><Link href="/blog" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Blog</Link></li>
-                        <li><Link href="/resources" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Guides</Link></li>
-                        <li><Link href="/faqs" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">FAQs</Link></li>
-                        <li><Link href="/help" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Help Center</Link></li>
-                    </ul>
-                </div>
+                    {/* Resources */}
+                    <div>
+                        <h3 className="font-semibold text-[#000000] text-[14px] mb-3 text-center md:text-left">Resources</h3>
+                        <ul className="space-y-2 text-[#000000]/70 text-[12px] text-center md:text-left">
+                            <li><Link href="/blog" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Blog</Link></li>
+                            <li><Link href="/resources" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Guides</Link></li>
+                            <li><Link href="/faqs" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">FAQs</Link></li>
+                            <li><Link href="/help" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Help Center</Link></li>
+                        </ul>
+                    </div>
 
-                {/* Legal */}
-                <div>
-                    <h3 className="font-semibold text-[#000000] text-[14px] mb-3">Legal</h3>
-                    <ul className="space-y-2 text-[#000000]/70 text-[12px]">
-                        <li><Link href="/privacy" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Privacy Policy</Link></li>
-                        <li><Link href="/terms" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Terms of Service</Link></li>
-                        <li><Link href="/refund" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Refund Policy</Link></li>
-                    </ul>
+                    {/* Legal */}
+                    <div>
+                        <h3 className="font-semibold text-[#000000] text-[14px] mb-3 text-center md:text-left">Legal</h3>
+                        <ul className="space-y-2 text-[#000000]/70 text-[12px] text-center md:text-left">
+                            <li><Link href="/privacy" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Privacy Policy</Link></li>
+                            <li><Link href="/terms" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Terms of Service</Link></li>
+                            <li><Link href="/refund" className="inline-block hover:text-violet-600 hover:translate-x-1 transition-all duration-500 cursor-pointer">Refund Policy</Link></li>
+                        </ul>
+                    </div>
                 </div>
 
                 {/* Follow Us & Copyright */}
-                <div className="shrink-0">
-                    <h3 className="font-semibold text-[#000000] text-[14px] mb-3">Follow Us</h3>
+                <div className="shrink-0 mx-auto lg:mx-0 mt-6 md:mt-0">
+                    <h3 className="font-semibold text-[#000000] text-[14px] mb-3 text-center lg:text-left">Follow Us</h3>
 
                     {/* Social Icons */}
-                    <div className="flex items-center gap-2 mb-6">
+                    <div className="flex items-center justify-center lg:justify-start gap-2 mb-6">
                         <a href="https://www.facebook.com/akshayg.0922" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#635BFF] text-white flex items-center justify-center opacity-90 hover:opacity-100 hover:-translate-y-2 transition-all duration-500">
                             <FaFacebookF size={14} />
                         </a>
@@ -83,8 +85,8 @@ const Footer = () => {
                     </div>
 
                     {/* Copyright */}
-                    <p className="text-[12px] text-[#000000]/70 whitespace-nowrap">
-                        © 2024 GetAdvanceGuide. All rights reserved.
+                    <p className="text-[12px] text-[#000000]/70 text-center lg:text-left whitespace-nowrap">
+                        © 2026 GetAdvanceGuide. All rights reserved.
                     </p>
                 </div>
             </MaxWidthWrapper>

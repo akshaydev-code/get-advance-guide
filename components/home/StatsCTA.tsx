@@ -27,19 +27,19 @@ const stats = [
 
 const StatsCTA = () => {
     return (
-        <MaxWidthWrapper className="bg-linear-to-r from-violet-700 via-violet-500 to-violet-300 rounded-[22px] py-6 px-9 text-white flex items-center justify-between gap-9">
+        <MaxWidthWrapper className="bg-linear-to-t from-violet-700 via-violet-500 to-violet-300 lg:bg-linear-to-r rounded-[22px] py-6 px-9 text-white flex flex-col md:flex-row items-center justify-between gap-9">
 
             {/* Left Side: Stats Items */}
-            <div className="grid grid-cols-4 gap-9 flex-1 w-full lg:border-r border-white/40 lg:pr-9">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-9 flex-1 w-full lg:border-r border-white/40 lg:pr-9">
                 {stats.map((item, index) => {
                     const Icon = item.icon;
                     return (
                         <div key={index} className="flex flex-col items-center text-center">
-                            <Icon className="w-11 h-11 mb-3 text-white/90 stroke-[1.5]" />
-                            <h3 className="text-[31px] font-semibold mb-1">
+                            <Icon className="w-9 h-9 lg:w-11 lg:h-11 mb-3 text-white/90 stroke-[1.5]" />
+                            <h3 className="text-[22px] lg:text-[31px] font-semibold mb-1">
                                 {item.value}
                             </h3>
-                            <p className="text-white/90 text-[14px] font-medium">
+                            <p className="text-white/90 text-[11px] lg:text-[14px] font-medium">
                                 {item.label}
                             </p>
                         </div>
@@ -49,13 +49,13 @@ const StatsCTA = () => {
 
             {/* Right Side: CTA Section */}
             <div className="flex flex-col items-center text-center lg:w-72 shrink-0 space-y-4">
-                <h3 className="text-[22px] font-semibold leading-tight text-white">
+                <h3 className="text-[18px] lg:text-[22px] font-semibold leading-tight text-white">
                     Ready to accelerate <br className="hidden sm:inline" />
                     your growth?
                 </h3>
 
                 <button
-                    className="group relative overflow-hidden rounded-[11px] bg-white px-6 py-2.5 font-semibold text-[14px] text-violet-600 cursor-pointer"
+                    className="group relative overflow-hidden rounded-[11px] bg-white px-6 py-2.5 font-semibold text-[11px] lg:text-[14px] text-violet-600 cursor-pointer transition-all duration-100 active:scale-95"
                 >
                     {/* Animated Background */}
                     <span className="absolute inset-0 -translate-x-full bg-violet-600 transition-transform duration-700 ease-out group-hover:translate-x-0"></span>
