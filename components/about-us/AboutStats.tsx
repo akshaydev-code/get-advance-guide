@@ -83,7 +83,7 @@ const AboutStats = () => {
                 {AboutStatsData.map((item, index) => (
                     <div
                         key={index}
-                        className="flex flex-col items-center gap-2 lg:gap-4 px-9 py-5"
+                        className="flex flex-col lg:flex-row items-center gap-2 lg:gap-4 px-9 py-5"
                     >
                         <div className="w-18 h-18 rounded-full border-2 border-violet-100 bg-white text-violet-600 flex items-center justify-center">
                             {item.icon}
