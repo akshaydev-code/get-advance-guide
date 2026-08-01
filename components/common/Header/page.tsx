@@ -46,7 +46,7 @@ const Header = () => {
                         className="object-cover w-[50px] md:w-[70px] lg:w-[77px] h-auto"
                     />
                     <p className="text-[20px] md:text-[24px] font-semibold text-[#000000]">
-                        GetAdvance<span className="text-violet-600">Guide</span>
+                        GetAdvance<span className="text-violet-600 text-[20px] md:text-[24px]">Guide</span>
                     </p>
                 </Link>
 

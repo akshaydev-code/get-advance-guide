@@ -119,7 +119,7 @@ export default function LoginPage() {
                 </section>
             </main>
 
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }
@@ -148,33 +148,33 @@ function SocialButton({ icon, text }: { icon: React.ReactNode, text: string }) {
     );
 }
 
-function Footer() {
-    return (
-        <footer className="bg-[#6342E8] text-white py-16 px-8 lg:px-20">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-                <div className="lg:col-span-2">
-                    <div className="flex items-center gap-2 mb-6">
-                        <div className="w-8 h-8 bg-white text-[#6342E8] rounded flex items-center justify-center font-bold italic">AG</div>
-                        <span className="text-xl font-bold">GetAdvanceGuide</span>
-                    </div>
-                    <p className="text-purple-100 text-sm leading-relaxed max-w-sm opacity-80">
-                        Empowering students and professionals by connecting them with the right mentors for guidance, growth, and success.
-                    </p>
-                </div>
+// function Footer() {
+//     return (
+//         <footer className="bg-[#6342E8] text-white py-16 px-8 lg:px-20">
+//             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+//                 <div className="lg:col-span-2">
+//                     <div className="flex items-center gap-2 mb-6">
+//                         <div className="w-8 h-8 bg-white text-[#6342E8] rounded flex items-center justify-center font-bold italic">AG</div>
+//                         <span className="text-xl font-bold">GetAdvanceGuide</span>
+//                     </div>
+//                     <p className="text-purple-100 text-sm leading-relaxed max-w-sm opacity-80">
+//                         Empowering students and professionals by connecting them with the right mentors for guidance, growth, and success.
+//                     </p>
+//                 </div>
 
-                <FooterColumn title="Quick Links" links={['Home', 'Mentors', 'How It Works', 'About Us', 'Contact']} />
-                <FooterColumn title="Resources" links={['Blog', 'Guides', 'FAQs', 'Help Center']} />
-                <FooterColumn title="Legal" links={['Privacy Policy', 'Terms of Service', 'Refund Policy']} />
-            </div>
-            <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p className="text-xs text-purple-200 opacity-60">© 2024 GetAdvanceGuide. All rights reserved.</p>
-                <div className="flex gap-4">
-                    {/* Social icons here */}
-                </div>
-            </div>
-        </footer>
-    );
-}
+//                 <FooterColumn title="Quick Links" links={['Home', 'Mentors', 'How It Works', 'About Us', 'Contact']} />
+//                 <FooterColumn title="Resources" links={['Blog', 'Guides', 'FAQs', 'Help Center']} />
+//                 <FooterColumn title="Legal" links={['Privacy Policy', 'Terms of Service', 'Refund Policy']} />
+//             </div>
+//             <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+//                 <p className="text-xs text-purple-200 opacity-60">© 2024 GetAdvanceGuide. All rights reserved.</p>
+//                 <div className="flex gap-4">
+//                     {/* Social icons here */}
+//                 </div>
+//             </div>
+//         </footer>
+//     );
+// }
 
 function FooterColumn({ title, links }: { title: string, links: string[] }) {
     return (

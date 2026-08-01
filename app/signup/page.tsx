@@ -160,7 +160,7 @@ export default function SignupPage() {
         }
       `}</style>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
@@ -198,26 +198,26 @@ function RoleCard({ active, onClick, icon, title, desc }: { active: boolean, onC
   );
 }
 
-function Footer() {
-  return (
-    <footer className="bg-[#6342E8] text-white py-12 px-8 lg:px-16 mt-auto">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
-        <div className="lg:col-span-2">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-white text-[#6342E8] rounded flex items-center justify-center font-bold italic">AG</div>
-            <span className="text-xl font-bold">GetAdvanceGuide</span>
-          </div>
-          <p className="text-purple-100 text-xs leading-relaxed max-w-xs opacity-80">
-            Empowering students and professionals by connecting them with the right mentors for guidance, growth, and success.
-          </p>
-        </div>
-        <FooterCol title="Quick Links" items={['Home', 'Mentors', 'How It Works', 'About Us', 'Contact']} />
-        <FooterCol title="Resources" items={['Blog', 'Guides', 'FAQs', 'Help Center']} />
-        <FooterCol title="Legal" items={['Privacy Policy', 'Terms of Service', 'Refund Policy']} />
-      </div>
-    </footer>
-  );
-}
+// function Footer() {
+//   return (
+//     <footer className="bg-[#6342E8] text-white py-12 px-8 lg:px-16 mt-auto">
+//       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
+//         <div className="lg:col-span-2">
+//           <div className="flex items-center gap-2 mb-4">
+//             <div className="w-8 h-8 bg-white text-[#6342E8] rounded flex items-center justify-center font-bold italic">AG</div>
+//             <span className="text-xl font-bold">GetAdvanceGuide</span>
+//           </div>
+//           <p className="text-purple-100 text-xs leading-relaxed max-w-xs opacity-80">
+//             Empowering students and professionals by connecting them with the right mentors for guidance, growth, and success.
+//           </p>
+//         </div>
+//         <FooterCol title="Quick Links" items={['Home', 'Mentors', 'How It Works', 'About Us', 'Contact']} />
+//         <FooterCol title="Resources" items={['Blog', 'Guides', 'FAQs', 'Help Center']} />
+//         <FooterCol title="Legal" items={['Privacy Policy', 'Terms of Service', 'Refund Policy']} />
+//       </div>
+//     </footer>
+//   );
+// }
 
 function FooterCol({ title, items }: { title: string, items: string[] }) {
   return (

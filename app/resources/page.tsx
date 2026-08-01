@@ -26,7 +26,7 @@ export default function ResourceHubPage() {
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-purple-600 selection:text-white">
       
       {/* 1. NAVBAR */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      {/* <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-black text-xl px-3 py-1.5 rounded-lg shadow-md flex items-center gap-1">
@@ -55,7 +55,7 @@ export default function ResourceHubPage() {
             </button>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* 2. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 pb-16 bg-gradient-to-b from-purple-50/50 to-white">
@@ -359,10 +359,10 @@ export default function ResourceHubPage() {
       </section>
 
       {/* 9. DETAILED FOOTER */}
-      <footer className="bg-slate-50 border-t border-slate-200/80 pt-16 pb-12">
+      {/* <footer className="bg-slate-50 border-t border-slate-200/80 pt-16 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200/60">
           
-          {/* Logo & Info */}
+         
           <div className="space-y-4 lg:col-span-1">
             <div className="flex items-center gap-2">
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-black text-lg px-2.5 py-1 rounded-lg">
@@ -373,15 +373,15 @@ export default function ResourceHubPage() {
             <p className="text-slate-500 text-xs leading-relaxed">
               Empowering learners through mentorship, resources and guidance to achieve their goals and unlock their potential.
             </p>
-            {/* <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Facebook className="w-3.5 h-3.5" /></div>
               <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Twitter className="w-3.5 h-3.5" /></div>
               <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Linkedin className="w-3.5 h-3.5" /></div>
               <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Instagram className="w-3.5 h-3.5" /></div>
-            </div> */}
+            </div>
           </div>
 
-          {/* Blogs */}
+         
           <div className="space-y-3">
             <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Blogs</h4>
             <ul className="space-y-2 text-xs text-slate-600">
@@ -393,7 +393,6 @@ export default function ResourceHubPage() {
             </ul>
           </div>
 
-          {/* Guides */}
           <div className="space-y-3">
             <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Guides</h4>
             <ul className="space-y-2 text-xs text-slate-600">
@@ -405,7 +404,7 @@ export default function ResourceHubPage() {
             </ul>
           </div>
 
-          {/* GAQ */}
+
           <div className="space-y-3">
             <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">GAQ</h4>
             <ul className="space-y-2 text-xs text-slate-600">
@@ -417,7 +416,6 @@ export default function ResourceHubPage() {
             </ul>
           </div>
 
-          {/* Help Center & Need Help */}
           <div className="space-y-4">
             <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Help Center</h4>
             <ul className="space-y-2 text-xs text-slate-600 pb-2">
@@ -442,7 +440,6 @@ export default function ResourceHubPage() {
 
         </div>
 
-        {/* Copyright & Bottom Links */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <div>© 2024 GetAdvanceGuide. All rights reserved.</div>
           <div className="flex items-center gap-6">
@@ -451,7 +448,7 @@ export default function ResourceHubPage() {
             <a href="#" className="hover:underline">Refund Policy</a>
           </div>
         </div>
-      </footer>
+      </footer> */}
 
     </div>
   );

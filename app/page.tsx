@@ -1,20 +1,9 @@
-import HeroSection from "@/components/home/HomeBanner";
-import StatsCTA from "@/components/home/StatsCTA";
-import HowItWorksSection from "@/components/home/HowItWorksSection";
+import Home from "./home/page"
 
-const HomePage = () => {
+const page = () => {
   return (
-    <div className="min-h-screen overflow-hidden">
-      {/* HERO */}
-      <HeroSection />
-
-      {/* HOW IT WORKS */}
-      <HowItWorksSection />
-
-      {/* STATS CTA */}
-      <StatsCTA />
-    </div>
-  );
+    <Home />
+  )
 }
 
-export default HomePage;
+export default page;

@@ -108,7 +108,7 @@ const HomeBanner = () => {
                         <h1 className="text-[36px] lg:text-[45px] leading-11 lg:leading-13 text-center lg:text-left font-bold text-[#000000]">
                             Find Mentor.<br />
                             Get Guidance.<br />
-                            <span className="text-violet-600">Achieve More.</span>
+                            <span className="text-violet-600 text-[36px] lg:text-[45px]">Achieve More.</span>
                         </h1>
 
                         {/* Description */}

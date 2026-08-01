@@ -22,7 +22,7 @@ export default function HowItWorksPage() {
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-purple-600 selection:text-white">
       
       {/* 1. NAVBAR */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+      {/* <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-black text-xl px-3 py-1.5 rounded-lg shadow-md flex items-center gap-1">
@@ -51,7 +51,7 @@ export default function HowItWorksPage() {
             </button>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* 2. HERO SECTION */}
       <section className="relative overflow-hidden pt-12 pb-24 bg-gradient-to-b from-purple-50/50 to-white">
