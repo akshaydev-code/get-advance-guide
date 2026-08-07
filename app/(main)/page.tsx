@@ -1,4 +1,4 @@
-import Home from "./home/page"
+import Home from "../(main)/home/page";
 
 const page = () => {
   return (
