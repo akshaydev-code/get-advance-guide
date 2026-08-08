@@ -6,54 +6,58 @@ import {
 } from "lucide-react";
 import MaxWidthWrapper from "../common/MaxWidthWrapper/MaxWidthWrapper";
 
+const MentorFeaturesData = [
+    {
+        icon: <ShieldCheck size={22} />,
+        title: "Verified Mentors",
+        desc: "All mentors are verified and background checked.",
+    },
+    {
+        icon: <MessageCircleMore size={22} />,
+        title: "Personalized Match",
+        desc: "Find mentors that match your goals and needs.",
+    },
+    {
+        icon: <CalendarDays size={22} />,
+        title: "Flexible Sessions",
+        desc: "Book sessions at your convenience.",
+    },
+    {
+        icon: <Lock size={22} />,
+        title: "Secure & Reliable",
+        desc: "Your data and privacy are our top priority.",
+    },
+]
+
 const MentorsFeatures = () => {
     return (
-        <div>
+        <div className="py-6">
             <MaxWidthWrapper>
-                <div className="pb-20">
-                    <div className="bg-white border border-[#ececf3] rounded-[32px] grid md:grid-cols-4 overflow-hidden">
-                        {[
-                            {
-                                icon: <ShieldCheck size={28} />,
-                                title: "Verified Mentors",
-                                desc: "All mentors are verified and background checked.",
-                            },
-                            {
-                                icon: <MessageCircleMore size={28} />,
-                                title: "Personalized Match",
-                                desc: "Find mentors that match your goals and needs.",
-                            },
-                            {
-                                icon: <CalendarDays size={28} />,
-                                title: "Flexible Sessions",
-                                desc: "Book sessions at your convenience.",
-                            },
-                            {
-                                icon: <Lock size={28} />,
-                                title: "Secure & Reliable",
-                                desc: "Your data and privacy are our top priority.",
-                            },
-                        ].map((item, index) => (
-                            <div
-                                key={index}
-                                className="flex items-start gap-5 p-10 border-r border-[#ececf3] last:border-r-0"
-                            >
-                                <div className="w-16 h-16 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center">
-                                    {item.icon}
-                                </div>
-
-                                <div>
-                                    <h3 className="text-2xl font-bold mb-3">
-                                        {item.title}
-                                    </h3>
-
-                                    <p className="text-gray-500 leading-7">
-                                        {item.desc}
-                                    </p>
-                                </div>
+                <div className="bg-white border border-gray-300 rounded-[22px] grid grid-cols-1 md:grid-cols-4 overflow-hidden">
+                    {MentorFeaturesData?.map((item, index) => (
+                        <div
+                            key={index}
+                            className="flex items-start gap-4 p-4"
+                        >
+                            <div className="p-3 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center">
+                                {item.icon}
                             </div>
-                        ))}
-                    </div>
+
+                            <div>
+                                <h3 className="text-[14px] font-semibold mb-1">
+                                    {item.title}
+                                </h3>
+
+                                <p className="text-gray-600 text-[12px]">
+                                    {item.desc}
+                                </p>
+                            </div>
+
+                            {index !== MentorFeaturesData.length - 1 && (
+                                <div className="w-0.5 h-[80%] bg-gray-200 shrink-0" />
+                            )}
+                        </div>
+                    ))}
                 </div>
             </MaxWidthWrapper>
         </div>
