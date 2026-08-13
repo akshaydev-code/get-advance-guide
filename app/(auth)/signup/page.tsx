@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { User, Mail, Lock, Eye, ChevronDown, GraduationCap, Users } from 'lucide-react';
 import { ChartNoAxesCombined, MessageCircleMore, UserRoundPlus } from 'lucide-react';
 // import { FcGoogle } from "react-icons/fc";
@@ -46,7 +47,74 @@ const roles = [
 ] as const;
 
 const SignupPage = () => {
+  const router = useRouter();
+
   const [role, setRole] = useState<'student' | 'mentor'>('student');
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setError('');
+
+    if (!name.trim()) {
+      setError('Please enter your full name.');
+      return;
+    }
+
+    if (!email.trim()) {
+      setError('Please enter your email.');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Signup failed. Please try again.');
+        return;
+      }
+
+      router.push('/login');
+    } catch (error) {
+      console.error('Signup error:', error);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
@@ -244,7 +312,7 @@ const SignupPage = () => {
           </div>
 
           {/* Fields */}
-          <form className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4">
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               {/* Full Name */}
               <div>
@@ -254,6 +322,8 @@ const SignupPage = () => {
                   <input
                     type="text"
                     placeholder="Enter your full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="text-[11px] w-full pl-12 pr-4 py-2 border border-gray-200 rounded-[11px] focus:ring focus:ring-purple-600 focus:border-transparent outline-none transition-all"
                   />
                 </div>
@@ -267,6 +337,8 @@ const SignupPage = () => {
                   <input
                     type="email"
                     placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="text-[11px] w-full pl-12 pr-4 py-2 border border-gray-200 rounded-[11px] focus:ring focus:ring-purple-600 focus:border-transparent outline-none transition-all"
                   />
                 </div>
@@ -282,6 +354,8 @@ const SignupPage = () => {
                   <input
                     type="password"
                     placeholder="Create your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="text-[11px] w-full pl-12 pr-4 py-2 border border-gray-200 rounded-[11px] focus:ring focus:ring-purple-600 focus:border-transparent outline-none transition-all"
                   />
                   <Eye className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 cursor-pointer hover:text-gray-700" />
@@ -308,6 +382,8 @@ const SignupPage = () => {
                   <input
                     type="password"
                     placeholder="Confirm your password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="text-[11px] w-full pl-12 pr-4 py-2 border border-gray-200 rounded-[11px] focus:ring focus:ring-purple-600 focus:border-transparent outline-none transition-all"
                   />
                   <Eye className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 cursor-pointer hover:text-gray-700" />
@@ -369,15 +445,29 @@ const SignupPage = () => {
 
             {/* Terms */}
             <div className="flex items-center gap-2 pt-2">
-              <input type="checkbox" id="terms" className="w-4 h-4 rounded text-[#6342E8] focus:ring-purple-600" />
+              <input type="checkbox" id="terms" required className="w-4 h-4 rounded text-[#6342E8] focus:ring-purple-600" />
               <label htmlFor="terms" className="ml-2 text-[12px] font-semibold text-gray-600 cursor-pointer">
                 I agree to the <span className="text-[#6342E8] font-bold">Terms & Conditions</span> and <span className="text-[#6342E8] font-bold">Privacy Policy</span>
               </label>
             </div>
 
+            {error && (
+              <p className="text-center text-[11px] font-semibold text-red-500">
+                {error}
+              </p>
+            )}
+
             {/* Button */}
-            <button className="w-full bg-[#6342E8] text-white font-bold py-2 rounded-[11px] hover:bg-[#5235cc] transition-all transform active:scale-[0.98] cursor-pointer">
+            {/* <button className="w-full bg-[#6342E8] text-white font-bold py-2 rounded-[11px] hover:bg-[#5235cc] transition-all transform active:scale-[0.98] cursor-pointer">
               Create Account
+            </button> */}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#6342E8] text-white font-bold py-2 rounded-[11px] hover:bg-[#5235cc] transition-all transform active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
 
             {/* <div className="relative flex py-2 items-center">

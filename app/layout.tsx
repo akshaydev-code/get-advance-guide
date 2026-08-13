@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 
 // CSS FILES
 import "../@core/styles/globals.css";
@@ -36,7 +37,42 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Link
+          href="https://geturai.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit GetURAI"
+          className="
+      fixed
+      bottom-5
+      right-5
+      z-50
+      w-12
+      h-12
+      lg:w-14
+      lg:h-14
+      rounded-full
+      bg-black
+      text-white
+      flex
+      items-center
+      justify-center
+      shadow-lg
+      hover:scale-110
+      hover:shadow-xl
+      hover:bg-[#6342E8]
+      transition-all
+      duration-300
+      animate-bounce
+    "
+        >
+          <span className="text-sm font-bold">
+            AI
+          </span>
+        </Link>
+      </body>
     </html>
   );
 }

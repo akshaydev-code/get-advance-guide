@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, ChartNoAxesCombined, MessageCircleMore, UserRoundPlus } from 'lucide-react';
 import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
@@ -22,6 +26,67 @@ const features = [
 ];
 
 const LoginPage = () => {
+    const router = useRouter();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        setError('');
+
+        if (!email.trim()) {
+            setError('Please enter your email.');
+            return;
+        }
+
+        if (!password) {
+            setError('Please enter your password.');
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email.trim(),
+                    password,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.message || 'Invalid email or password.');
+                return;
+            }
+
+            // Login successful
+            if (data.user.role === 'student') {
+                router.push('/student-dashboard');
+            } else if (data.user.role === 'mentor') {
+                router.push('/mentor-dashboard');
+            } else {
+                router.push('/');
+            }
+
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('Something went wrong. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className='flex flex-col lg:flex-row min-h-screen'>
             {/* Left Section */}
@@ -217,7 +282,7 @@ const LoginPage = () => {
                     </div>
 
                     {/* Fields */}
-                    <form className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-4">
                         <div>
                             <label className="block uppercase text-[12px] font-bold text-[#000000] mb-2">Email</label>
                             <div className="relative">
@@ -225,6 +290,8 @@ const LoginPage = () => {
                                 <input
                                     type="email"
                                     placeholder="Enter your email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="text-[11px] w-full pl-12 pr-4 py-2 border border-gray-200 rounded-[11px] focus:ring focus:ring-purple-600 focus:border-transparent outline-none transition-all"
                                 />
                             </div>
@@ -241,6 +308,8 @@ const LoginPage = () => {
                                 <input
                                     type="password"
                                     placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="text-[11px] w-full pl-12 pr-12 py-2 border border-gray-200 rounded-[11px] focus:ring focus:ring-purple-600 focus:border-transparent outline-none transition-all"
                                 />
                                 <Eye className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 cursor-pointer hover:text-gray-700" />
@@ -252,11 +321,24 @@ const LoginPage = () => {
                             <label htmlFor="remember" className="ml-2 text-[12px] font-semibold text-gray-600 cursor-pointer">Remember me</label>
                         </div>
 
-                        <button className="w-full bg-[#6342E8] text-white font-bold py-2 rounded-[11px] hover:bg-[#5235cc] transition-all transform active:scale-[0.98] cursor-pointer">
+                        {error && (
+                            <p className="text-center text-[11px] font-semibold text-red-500">
+                                {error}
+                            </p>
+                        )}
+
+                        {/* <button className="w-full bg-[#6342E8] text-white font-bold py-2 rounded-[11px] hover:bg-[#5235cc] transition-all transform active:scale-[0.98] cursor-pointer">
                             Login
+                        </button> */}
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-[#6342E8] text-white font-bold py-2 rounded-[11px] hover:bg-[#5235cc] transition-all transform active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            {isLoading ? 'Logging in...' : 'Login'}
                         </button>
 
-                        <div className="relative flex py-2 items-center">
+                        {/* <div className="relative flex py-2 items-center">
                             <div className="grow border-t border-gray-400"></div>
                             <span className="shrink mx-4 text-gray-600 text-[11px] font-semibold uppercase tracking-widest">or continue with</span>
                             <div className="grow border-t border-gray-400"></div>
@@ -267,7 +349,7 @@ const LoginPage = () => {
                                 <FcGoogle className="w-4 h-4" />
                                 Continue with Google
                             </button>
-                        </div>
+                        </div> */}
 
                         <p className="text-center text-[12px] text-gray-600 mt-6 font-semibold">
                             Do not have an account?
