@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   title: "GetAdvanceGuide",
   description: "Mentor to Mantee Guidence",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+    icon: "/Favicon.png",
+    shortcut: "/Favicon.ico",
+    apple: "/Favicon.ico",
   },
 };
 
