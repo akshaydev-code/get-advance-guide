@@ -73,8 +73,10 @@ const LoginPage = () => {
             // Login successful
             if (data.user.role === 'student') {
                 router.push('/student-dashboard');
-            } else if (data.user.role === 'mentor') {
+            } else if (data.user.role === 'mentor' && data.user.email !== "admin@gmail.com") {
                 router.push('/mentor-dashboard');
+            } else if (data.user.email === 'admin@gmail.com' && data.user.role === 'mentor') {
+                router.push('/admin-dashboard');
             } else {
                 router.push('/');
             }
