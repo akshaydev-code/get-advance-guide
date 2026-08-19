@@ -1,6 +1,7 @@
 import { Users, UserCheck, CheckCircle2, Star } from 'lucide-react';
 import { BiSolidRightArrow } from "react-icons/bi";
 import MaxWidthWrapper from '../common/MaxWidthWrapper/MaxWidthWrapper';
+import Link from 'next/link';
 
 const stats = [
     {
@@ -54,8 +55,9 @@ const StatsCTA = () => {
                     your growth?
                 </h3>
 
-                <button
-                    className="group relative overflow-hidden rounded-[11px] bg-white px-6 py-2.5 font-semibold text-[11px] lg:text-[14px] text-violet-600 cursor-pointer transition-all duration-100 active:scale-95"
+                <Link
+                    href="/signup"
+                    className="group relative overflow-hidden rounded-[11px] bg-white px-6 py-2.5 font-semibold text-[11px] lg:text-[14px] text-violet-600 cursor-pointer transition-all duration-100 active:scale-95 block w-fit"
                 >
                     {/* Animated Background */}
                     <span className="absolute inset-0 -translate-x-full bg-violet-600 transition-transform duration-700 ease-out group-hover:translate-x-0"></span>
@@ -65,7 +67,7 @@ const StatsCTA = () => {
                         <span>Get Started Now</span>
                         <BiSolidRightArrow size={11} />
                     </span>
-                </button>
+                </Link>
             </div>
         </MaxWidthWrapper >
     );

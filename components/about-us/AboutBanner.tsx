@@ -1,9 +1,14 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import MaxWidthWrapper from "../common/MaxWidthWrapper/MaxWidthWrapper";
 import { RiStarSLine } from "react-icons/ri";
 
 const AboutBanner = () => {
+    const router = useRouter();
+
     return (
         <div className="relative bg-linear-to-b from-[#FFFFFF] to-[#EEE7FD] pt-4 pb-12">
             {/* DOTS */}
@@ -129,7 +134,7 @@ const AboutBanner = () => {
 
                     {/* Button */}
                     <div className="flex items-center gap-4 mb-8 text-[11px] lg:text-[14px] mt-4">
-                        <button className="group relative overflow-hidden rounded-[11px] bg-violet-600 px-6 py-3 font-semibold text-white cursor-pointer transition-all duration-100 active:scale-95">
+                        <button onClick={() => router.push("/signup")} className="group relative overflow-hidden rounded-[11px] bg-violet-600 px-6 py-3 font-semibold text-white cursor-pointer transition-all duration-100 active:scale-95">
 
                             <span className="absolute inset-0 -translate-x-full bg-white transition-transform duration-700 ease-out group-hover:translate-x-0"></span>
 

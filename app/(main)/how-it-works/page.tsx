@@ -1,383 +1,347 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import {
-  CheckCircle2,
-  ChevronDown,
-  Star,
-  ArrowRight,
-  User,
-  Search,
-  Calendar,
-  Rocket,
-  ShieldCheck,
-  Zap,
-  TrendingUp,
-  FileText,
-  Video,
-  MessageSquare,
-  Flag
+  User, Search, Calendar, Rocket, ShieldCheck, Zap,
+  TrendingUp, FileText, Video, MessageSquare, Flag,
+  ArrowRight, CheckCircle2, Star, Sparkles, ChevronRight,
+  HelpCircle, Compass, Layers
 } from 'lucide-react';
+import Link from 'next/link';
 import MaxWidthWrapper from '@/components/common/MaxWidthWrapper/MaxWidthWrapper';
 
+// Types & Data
+import { UserPersona } from '@/components/how-it-works/types';
+import {
+  studentJourneySteps, mentorJourneySteps,
+  processHighlights, howItWorksFaqs
+} from '@/components/how-it-works/data/howItWorksData';
+
+// Modular Components
+import StepSimulator from '@/components/how-it-works/components/StepSimulator';
+import EarningsCalculator from '@/components/how-it-works/components/EarningsCalculator';
+import FaqAccordion from '@/components/how-it-works/components/FaqAccordion';
+
+// Modals
+import InteractiveBookingDemoModal from '@/components/how-it-works/modals/InteractiveBookingDemoModal';
+
+const FEATURED_COACHES = [
+  {
+    name: 'Anubhav Mittal',
+    role: 'Senior Full Stack Engineer',
+    company: 'Google',
+    image: 'https://res.cloudinary.com/dkbelrldw/image/upload/v1785059102/HomeMentorImage_9_c0qrmh.webp',
+    rate: '$65/hr',
+    rating: 4.9,
+    reviews: 111,
+    category: 'Web Dev & System Design',
+  },
+  {
+    name: 'Gitakshi Sharma',
+    role: 'Staff Product Designer',
+    company: 'Nvidia',
+    image: 'https://res.cloudinary.com/dkbelrldw/image/upload/v1785059105/HomeMentorImage_8_mgrhux.webp',
+    rate: '$70/hr',
+    rating: 4.9,
+    reviews: 143,
+    category: 'UI/UX & Design Systems',
+  },
+  {
+    name: 'Chitrakshi Verma',
+    role: 'Data Scientist & ML Lead',
+    company: 'Flipkart',
+    image: 'https://res.cloudinary.com/dkbelrldw/image/upload/v1785059110/HomeMentorImage_6_vmrjbo.webp',
+    rate: '$55/hr',
+    rating: 4.8,
+    reviews: 96,
+    category: 'Data Science & PyTorch',
+  },
+  {
+    name: 'Tanvi Agarwal',
+    role: 'AI Researcher & Engineer',
+    company: 'Meta',
+    image: 'https://res.cloudinary.com/dkbelrldw/image/upload/v1785059102/HomeMentorImage_5_bgyc21.webp',
+    rate: '$85/hr',
+    rating: 5.0,
+    reviews: 62,
+    category: 'LLMs & AI Architecture',
+  },
+];
+
 export default function HowItWorksPage() {
+  const [persona, setPersona] = useState<UserPersona>('student');
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+
+  const activeSteps = persona === 'student' ? studentJourneySteps : mentorJourneySteps;
+
   return (
-    <MaxWidthWrapper>
-      <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans selection:bg-purple-600 selection:text-white">
+      {/* ===================== HERO BANNER ===================== */}
+      <section className="relative overflow-hidden pt-8 pb-16 bg-gradient-to-b from-purple-50/70 via-white to-[#F8FAFC]">
+        <MaxWidthWrapper>
+          <div className="bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-800 rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl shadow-violet-200">
+            <div className="absolute -right-10 -bottom-10 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute right-40 -top-10 w-72 h-72 bg-violet-400/20 rounded-full blur-3xl pointer-events-none" />
 
-        {/* 1. NAVBAR */}
-        {/* <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-black text-xl px-3 py-1.5 rounded-lg shadow-md flex items-center gap-1">
-              <span>AG</span>
-            </div>
-            <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent">
-              GetAdvanceGuide
-            </span>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#" className="hover:text-purple-600 transition-colors">Home</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Mentors</a>
-            <a href="#" className="text-purple-600 font-semibold relative after:absolute after:bottom-[-22px] after:left-0 after:w-full after:h-[2px] after:bg-purple-600">How It Works</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Resources</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">About Us</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Contact</a>
-          </nav>
-
-          <div className="flex items-center gap-4">
-            <button className="text-sm font-semibold text-purple-600 hover:text-purple-700 px-4 py-2">
-              Login
-            </button>
-            <button className="text-sm font-semibold bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition-all">
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </header> */}
-
-        {/* 2. HERO SECTION */}
-        <section className="relative overflow-hidden pt-12 pb-24 bg-gradient-to-b from-purple-50/50 to-white">
-          <div className="">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-100/80 text-purple-700 text-xs font-semibold mb-6">
-              <User className="w-3.5 h-3.5" /> How It Works
-            </div>
-
-            <div className="grid lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-7 space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
-                  Start Your Mentorship Journey in Just <span className="text-purple-600">4 Simple Steps.</span>
-                </h1>
-                <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-                  Whether you are looking for career guidance, interview preparation, or industry insights, finding the right mentor has never been easier.
-                </p>
-                <div>
-                  <button className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-7 py-3.5 rounded-xl shadow-lg shadow-purple-600/25 transition-all group">
-                    Find a Mentor
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
+            <div className="relative z-10 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-violet-100 text-xs font-semibold mb-4 border border-white/20">
+                <Sparkles size={14} className="text-amber-300" />
+                <span>The GetAdvanceGuide Mentorship Framework</span>
               </div>
 
-              {/* Hero Illustration Mockup */}
-              <div className="lg:col-span-5 relative">
-                <div className="relative bg-gradient-to-tr from-purple-100 to-indigo-100 rounded-3xl p-6 shadow-xl border border-purple-200/50 flex flex-col items-center justify-center min-h-[300px]">
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm text-xs font-medium text-slate-700">
-                    ✨ I am here to help you grow.
-                  </div>
-                  <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm text-xs font-medium text-slate-700">
-                    Let achieve your goals!
-                  </div>
-                  {/* Simplified visual representation of mentors collaborating */}
-                  <div className="flex items-center gap-4 my-8">
-                    <div className="w-20 h-20 rounded-full bg-purple-300 border-4 border-white shadow-md flex items-center justify-center font-bold text-purple-800 text-xl">
-                      👩‍💻
-                    </div>
-                    <div className="w-24 h-24 rounded-full bg-indigo-600 border-4 border-white shadow-lg flex items-center justify-center text-white text-2xl font-bold">
-                      👨‍💻
-                    </div>
-                  </div>
-                </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight mb-4">
+                How Mentorship Works on GetAdvanceGuide
+              </h1>
+
+              <p className="text-violet-100 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl font-medium">
+                Connect 1-on-1 with verified engineers from Google, Meta, Microsoft, and Nvidia. Follow a simple, structured 4-step framework to land your dream tech role.
+              </p>
+
+              {/* Persona Switcher Tabs in Hero */}
+              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md p-1.5 rounded-2xl w-fit border border-white/20">
+                <button
+                  onClick={() => setPersona('student')}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                    persona === 'student'
+                      ? 'bg-white text-violet-900 shadow-lg'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  <User size={14} /> For Students & Job Seekers
+                </button>
+                <button
+                  onClick={() => setPersona('mentor')}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                    persona === 'mentor'
+                      ? 'bg-white text-violet-900 shadow-lg'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  <ShieldCheck size={14} /> For Mentors & Coaches
+                </button>
               </div>
             </div>
           </div>
-        </section>
+        </MaxWidthWrapper>
+      </section>
 
-        {/* 3. JOURNEY OVERVIEW STEP CARDS */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Your Mentorship <span className="text-purple-600">Journey</span>
+      {/* ===================== INTERACTIVE 4-STEP SIMULATOR ===================== */}
+      <section className="py-12">
+        <MaxWidthWrapper>
+          <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+              Your {persona === 'student' ? 'Mentee' : 'Mentor'} Journey in <span className="text-violet-600">4 Simple Steps</span>
             </h2>
-            <div className="w-16 h-1 bg-purple-600 mx-auto mt-3 rounded-full"></div>
+            <p className="text-xs sm:text-sm text-gray-500 font-medium">
+              Click on each step below to inspect live interactive simulators and sample dashboards.
+            </p>
+          </div>
+
+          <StepSimulator
+            steps={activeSteps}
+            onOpenBookingDemo={() => setIsDemoModalOpen(true)}
+          />
+        </MaxWidthWrapper>
+      </section>
+
+      {/* ===================== WHY OUR PROCESS WORKS (HIGHLIGHTS) ===================== */}
+      <section className="py-16 bg-white border-y border-gray-100">
+        <MaxWidthWrapper>
+          <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-violet-50 text-violet-700 px-3 py-1 rounded-full border border-violet-100">
+              Why It Works
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+              Engineered for Real Career Outcomes
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 font-medium">
+              Built by engineers who have been on both sides of the hiring table.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { step: "01", title: "Create Account", desc: "Sign up and complete your profile to help mentors understand your goals.", icon: User },
-              { step: "02", title: "Find Mentor", desc: "Browse experienced mentors based on skills and industry.", icon: Search },
-              { step: "03", title: "Book Session", desc: "Choose available slots and confirm your booking.", icon: Calendar },
-              { step: "04", title: "Start Learning", desc: "Attend live sessions, ask questions and grow.", icon: Rocket },
-            ].map((item, idx) => (
-              <div key={idx} className="relative bg-white p-6 rounded-2xl border border-slate-100 shadow-xl shadow-slate-100 hover:border-purple-200 transition-all group">
-                <div className="absolute -top-4 left-6 bg-purple-600 text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-md">
-                  {item.step}
+            {processHighlights.map((hl, i) => (
+              <div
+                key={i}
+                className="bg-gray-50/70 p-6 md:p-7 rounded-3xl border border-gray-100 hover:border-violet-200 hover:bg-white hover:shadow-lg transition-all space-y-4 text-center group"
+              >
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-xs mx-auto border border-gray-100 group-hover:scale-110 transition-transform">
+                  {hl.icon}
                 </div>
-                <div className="mt-4 mb-4 text-purple-600 bg-purple-50 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                  <item.icon className="w-6 h-6" />
+                <div>
+                  <span className="text-[10px] font-black text-violet-700 bg-violet-50 px-2.5 py-0.5 rounded-full border border-violet-100">
+                    {hl.metric}
+                  </span>
+                  <h3 className="font-extrabold text-base text-gray-900 mt-2 mb-1">
+                    {hl.title}
+                  </h3>
+                  <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                    {hl.desc}
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
-        </section>
+        </MaxWidthWrapper>
+      </section>
 
-        {/* 4. DETAILED STEP-BY-STEP SECTIONS */}
-        <section className="py-16 space-y-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          {/* Step 01 Details */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center bg-slate-50/50 p-8 sm:p-12 rounded-3xl border border-slate-100">
-            <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 space-y-4">
-              <div className="flex items-center justify-between border-b pb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <span className="font-bold text-sm text-slate-800">My Profile</span>
-                </div>
-                <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full">90% Complete</span>
-              </div>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-                  <span className="text-slate-600 font-medium">Career Goals</span>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                </div>
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-                  <span className="text-slate-600 font-medium">Skills</span>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                </div>
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-                  <span className="text-slate-600 font-medium">Education</span>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                </div>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <span className="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">01</span>
-              <h3 className="text-3xl font-extrabold text-slate-900">Create Your Profile</h3>
-              <p className="text-slate-600 leading-relaxed">Tell us about your goals, skills and interests.</p>
-              <ul className="space-y-2 pt-2">
-                {['Career Goals', 'Skills', 'Education', 'Experience'].map((text, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm font-medium text-slate-700">
-                    <CheckCircle2 className="w-4 h-4 text-purple-600" /> {text}
-                  </li>
-                ))}
-              </ul>
-            </div>
+      {/* ===================== LINEAR TIMELINE PROCESS ===================== */}
+      <section className="py-16 bg-[#F8FAFC]">
+        <MaxWidthWrapper>
+          <div className="text-center max-w-xl mx-auto mb-12">
+            <h3 className="text-xl font-extrabold text-gray-900">The End-to-End Coaching Cycle</h3>
+            <p className="text-xs text-gray-500 mt-1">From initial profile creation to clearing your dream offer</p>
           </div>
 
-          {/* Step 02 Details */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center bg-slate-50/50 p-8 sm:p-12 rounded-3xl border border-slate-100">
-            <div className="space-y-4 order-2 lg:order-1">
-              <span className="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">02</span>
-              <h3 className="text-3xl font-extrabold text-slate-900">Choose the Right Mentor</h3>
-              <p className="text-slate-600 leading-relaxed">Filter mentors using domain, experience, rating and availability.</p>
-              <div className="space-y-2 pt-2">
-                {['Domain', 'Experience', 'Rating', 'Availability'].map((text, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm font-medium text-slate-700">
-                    <CheckCircle2 className="w-4 h-4 text-purple-600" /> {text}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 order-1 lg:order-2 space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-sm text-slate-800">Top Mentors for You</span>
-                <span className="text-xs text-purple-600 font-semibold cursor-pointer">View all</span>
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { name: "Rahul Mehta", role: "Software Engineer @ Google", rating: "4.8 (120)", exp: "5+ years" },
-                  { name: "Neha Kapoor", role: "Product Manager @ Microsoft", rating: "4.9 (98)", exp: "6+ years" },
-                  { name: "Vikram Singh", role: "Data Scientist @ Amazon", rating: "4.7 (86)", exp: "4+ years" },
-                ].map((mentor, i) => (
-                  <div key={i} className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center space-y-2">
-                    <div className="w-12 h-12 bg-purple-200 rounded-full mx-auto flex items-center justify-center font-bold text-purple-700 text-xs">👤</div>
-                    <h4 className="font-bold text-xs text-slate-900 truncate">{mentor.name}</h4>
-                    <p className="text-[10px] text-slate-500 truncate">{mentor.role}</p>
-                    <div className="flex items-center justify-center gap-1 text-[10px] text-amber-500 font-semibold">
-                      <Star className="w-3 h-3 fill-amber-500" /> {mentor.rating}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Step 03 Details */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center bg-slate-50/50 p-8 sm:p-12 rounded-3xl border border-slate-100">
-            <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 space-y-4">
-              <span className="font-bold text-sm text-slate-800 block">Select Date & Time</span>
-              <div className="bg-purple-50 p-4 rounded-xl text-center text-xs font-semibold text-purple-700">
-                May 2024 Calendar Mockup Component
-              </div>
-              <div className="space-y-2">
-                {['10.00 AM', '01.00 PM', '04.00 PM', '07.00 PM'].map((slot, i) => (
-                  <div key={i} className={`p-2.5 rounded-lg text-xs font-semibold text-center ${slot === '01.00 PM' ? 'bg-purple-600 text-white shadow-md' : 'bg-slate-100 text-slate-600'}`}>
-                    {slot}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-4">
-              <span className="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">03</span>
-              <h3 className="text-3xl font-extrabold text-slate-900">Book Session</h3>
-              <p className="text-slate-600 leading-relaxed">Choose your preferred date, time and session type.</p>
-              <ul className="space-y-2 pt-2">
-                {['Online', 'One-to-One', 'Flexible Timing'].map((text, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm font-medium text-slate-700">
-                    <CheckCircle2 className="w-4 h-4 text-purple-600" /> {text}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Step 04 Details */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center bg-slate-50/50 p-8 sm:p-12 rounded-3xl border border-slate-100">
-            <div className="space-y-4 order-2 lg:order-1">
-              <span className="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">04</span>
-              <h3 className="text-3xl font-extrabold text-slate-900">Learn & Grow</h3>
-              <p className="text-slate-600 leading-relaxed">Join meetings, receive guidance, track your progress and achieve your goals.</p>
-              <ul className="space-y-2 pt-2">
-                {['Live Sessions', 'Personalized Guidance', 'Track Progress'].map((text, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm font-medium text-slate-700">
-                    <CheckCircle2 className="w-4 h-4 text-purple-600" /> {text}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 order-1 lg:order-2 space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-sm text-slate-800">Your Progress</span>
-                <span className="text-xs font-bold text-purple-600">75% Overall</span>
-              </div>
-              <div className="space-y-2">
-                <div className="text-xs text-slate-500 font-medium">Skills Gained</div>
-                {['Communication 90%', 'Leadership 75%', 'Problem Solving 80%', 'Confidence 70%'].map((skill, i) => (
-                  <div key={i} className="space-y-1">
-                    <div className="flex justify-between text-[11px] font-semibold text-slate-700">
-                      <span>{skill.split(' ')[0]}</span>
-                      <span>{skill.split(' ')[1]}</span>
-                    </div>
-                    <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-purple-600 h-full rounded-full" style={{ width: skill.split(' ')[1] }}></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </section>
-
-        {/* 5. WHY OUR PROCESS WORKS */}
-        <section className="py-20 bg-slate-50 border-y border-slate-200/60">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mb-2">
-              Why Our Process <span className="text-purple-600">Works</span>
-            </h2>
-            <div className="w-16 h-1 bg-purple-600 mx-auto mb-16 rounded-full"></div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { title: "Personalized Matching", desc: "Get mentors perfectly suited to your goals.", icon: Zap },
-                { title: "Fast Booking", desc: "Schedule sessions within minutes.", icon: Calendar },
-                { title: "Secure Platform", desc: "Safe communication and your privacy.", icon: ShieldCheck },
-                { title: "Continuous Growth", desc: "Track your learning journey and progress.", icon: TrendingUp },
-              ].map((feature, i) => (
-                <div key={i} className="bg-white p-8 rounded-2xl shadow-md border border-slate-100 flex flex-col items-center text-center space-y-4">
-                  <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center shadow-inner">
-                    <feature.icon className="w-7 h-7" />
-                  </div>
-                  <h3 className="font-bold text-lg text-slate-900">{feature.title}</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">{feature.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 6. MENTORSHIP PROCESS LINEAR FLOW */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
-          <h2 className="text-xl font-bold text-slate-900 text-center mb-10">Mentorship Process</h2>
-          <div className="flex items-center justify-between min-w-[700px] gap-2 px-4">
+          <div className="flex items-center justify-between overflow-x-auto gap-3 py-4 px-2 scrollbar-none">
             {[
-              { label: "Create Account", icon: User },
-              { label: "Complete Profile", icon: FileText },
-              { label: "Find Mentor", icon: Search },
-              { label: "Book Session", icon: Calendar },
-              { label: "Attend Session", icon: Video },
-              { label: "Receive Feedback", icon: MessageSquare },
-              { label: "Achieve Goals", icon: Flag },
+              { label: 'Create Account', icon: User, num: '1' },
+              { label: 'Match Mentor', icon: Search, num: '2' },
+              { label: 'Book 1-on-1', icon: Calendar, num: '3' },
+              { label: 'Live Video Call', icon: Video, num: '4' },
+              { label: 'Get Feedback', icon: MessageSquare, num: '5' },
+              { label: 'Follow Roadmap', icon: Compass, num: '6' },
+              { label: 'Crack Offer 🎯', icon: Flag, num: '7' },
             ].map((step, idx, arr) => (
               <React.Fragment key={idx}>
-                <div className="flex flex-col items-center text-center space-y-2">
-                  <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-600 border border-purple-200 flex items-center justify-center shadow-sm">
-                    <step.icon className="w-4 h-4" />
+                <div className="flex flex-col items-center text-center space-y-2 flex-shrink-0 min-w-[90px]">
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200 text-violet-600 flex items-center justify-center font-bold shadow-xs hover:border-violet-400 transition-colors">
+                    <step.icon size={20} />
                   </div>
-                  <span className="text-xs font-semibold text-slate-700 max-w-[80px]">{step.label}</span>
+                  <span className="text-xs font-bold text-gray-800 leading-tight">{step.label}</span>
                 </div>
                 {idx < arr.length - 1 && (
-                  <div className="flex-1 h-[2px] bg-purple-200 border-dashed border-t border-purple-300"></div>
+                  <div className="flex-grow h-[2px] bg-violet-200 border-dashed border-t border-violet-300 min-w-[20px]" />
                 )}
               </React.Fragment>
             ))}
           </div>
-        </section>
+        </MaxWidthWrapper>
+      </section>
 
-        {/* 7. FREQUENTLY ASKED QUESTIONS */}
-        <section className="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 text-center mb-12">
-            Frequently Asked <span className="text-purple-600">Questions</span>
-          </h2>
-
-          <div className="grid sm:grid-cols-2 gap-4">
-            {[
-              "How do I book a mentor?",
-              "How do online sessions work?",
-              "How much does mentorship cost?",
-              "Can I become a mentor?",
-              "Can I reschedule sessions?"
-            ].map((faq, i) => (
-              <div key={i} className="flex items-center justify-between p-4 rounded-xl border border-slate-200 hover:border-purple-300 bg-white shadow-sm cursor-pointer transition-all">
-                <span className="text-sm font-medium text-slate-800">{faq}</span>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
+      {/* ===================== DYNAMIC EARNINGS CALCULATOR / MENTOR SPOTLIGHT ===================== */}
+      <section className="py-16 bg-white border-y border-gray-100">
+        <MaxWidthWrapper>
+          {persona === 'mentor' ? (
+            <EarningsCalculator />
+          ) : (
+            <div className="space-y-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-2xl font-black text-gray-900 tracking-tight">
+                    Learn from Industry Leaders
+                  </h3>
+                  <p className="text-xs text-gray-500 font-medium mt-0.5">
+                    Verified engineers ready to conduct mock interviews and resume reviews with you.
+                  </p>
+                </div>
+                <Link
+                  href="/mentors"
+                  className="text-xs font-bold text-violet-600 hover:underline flex items-center gap-1"
+                >
+                  View all 50+ Mentors <ArrowRight size={13} />
+                </Link>
               </div>
-            ))}
-          </div>
-        </section>
 
-        {/* 8. READY TO FIND YOUR MENTOR BANNER */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-900 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-8">
-            <div className="space-y-4 max-w-xl z-10">
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Ready to Find Your Mentor?</h2>
-              <p className="text-purple-200 text-sm leading-relaxed">
-                Join thousands of learners who are growing with GetAdvanceGuide.
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {FEATURED_COACHES.map((coach, i) => (
+                  <div
+                    key={i}
+                    className="bg-gray-50/70 p-6 rounded-3xl border border-gray-100 hover:border-violet-200 hover:bg-white hover:shadow-xl transition-all space-y-4 text-center group flex flex-col justify-between"
+                  >
+                    <div>
+                      <img
+                        src={coach.image}
+                        alt={coach.name}
+                        className="w-20 h-20 rounded-2xl object-cover border-2 border-violet-200 mx-auto shadow-xs group-hover:scale-105 transition-transform"
+                      />
+                      <h4 className="font-extrabold text-gray-900 text-sm mt-3">{coach.name}</h4>
+                      <p className="text-xs text-gray-500 font-medium">{coach.role}</p>
+                      <p className="text-xs text-violet-700 font-bold">@{coach.company}</p>
+
+                      <div className="flex items-center justify-center gap-1 text-xs text-amber-500 font-bold mt-2">
+                        <Star size={12} className="fill-amber-400" />
+                        <span>{coach.rating}</span>
+                        <span className="text-gray-400 font-normal">({coach.reviews})</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-gray-200/60 flex items-center justify-between">
+                      <span className="text-xs font-black text-gray-900">{coach.rate}</span>
+                      <button
+                        onClick={() => setIsDemoModalOpen(true)}
+                        className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer"
+                      >
+                        Book Mock
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </MaxWidthWrapper>
+      </section>
+
+      {/* ===================== FREQUENTLY ASKED QUESTIONS ===================== */}
+      <section className="py-20 bg-[#F8FAFC]">
+        <MaxWidthWrapper>
+          <div className="text-center max-w-xl mx-auto mb-10 space-y-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-violet-100 text-violet-700 px-3 py-1 rounded-full">
+              Got Questions?
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 font-medium">
+              Everything you need to know about booking, video calls, rescheduling, and payouts.
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto">
+            <FaqAccordion faqs={howItWorksFaqs} />
+          </div>
+        </MaxWidthWrapper>
+      </section>
+
+      {/* ===================== READY TO START CTA ===================== */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <MaxWidthWrapper>
+          <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-800 rounded-[2.5rem] p-8 md:p-12 text-white text-center relative overflow-hidden shadow-2xl shadow-violet-200">
+            <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+              <span className="text-[10px] font-bold tracking-wider uppercase bg-white/20 px-3 py-1 rounded-full">
+                Get Started Today
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
+                Ready to Take Your Engineering Career to the Next Level?
+              </h2>
+              <p className="text-violet-100 text-xs sm:text-sm font-medium leading-relaxed max-w-xl mx-auto">
+                Join thousands of software engineers from Stanford, Berkeley, and IITs who prepare and land offers with GetAdvanceGuide.
               </p>
-              <button className="bg-white text-purple-900 hover:bg-purple-50 font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2">
-                Find a Mentor <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="z-10 flex items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-purple-500/30 border border-purple-400/30 flex items-center justify-center text-2xl">👩‍🎓</div>
-              <div className="w-20 h-20 rounded-full bg-indigo-500/30 border border-indigo-400/30 flex items-center justify-center text-3xl">👨‍💻</div>
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/mentors"
+                  className="px-6 py-3 bg-white text-violet-700 hover:bg-violet-50 rounded-2xl font-bold text-xs shadow-lg shadow-violet-950/20 transition-all hover:scale-105"
+                >
+                  Find a Mentor Now
+                </Link>
+                <Link
+                  href="/become-a-mentor"
+                  className="px-6 py-3 bg-white/15 hover:bg-white/25 text-white rounded-2xl font-bold text-xs border border-white/20 transition-all"
+                >
+                  Become a Mentor
+                </Link>
+              </div>
             </div>
           </div>
-        </section>
+        </MaxWidthWrapper>
+      </section>
 
-      </div>
-    </MaxWidthWrapper>
+      {/* ===================== DEMO BOOKING SIMULATOR MODAL ===================== */}
+      <InteractiveBookingDemoModal
+        isOpen={isDemoModalOpen}
+        onClose={() => setIsDemoModalOpen(false)}
+      />
+    </div>
   );
 }

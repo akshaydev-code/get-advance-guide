@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
+import { createAuthToken } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
@@ -76,7 +77,15 @@ export async function POST(request: Request) {
       isEmailVerified: false,
     });
 
-    return NextResponse.json(
+    // Create JWT
+    const token = createAuthToken({
+      userId: user._id.toString(),
+      email: user.email,
+      role: user.role,
+    });
+
+    // Create response
+    const response = NextResponse.json(
       {
         success: true,
         message: "Account created successfully",
@@ -89,6 +98,17 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
+
+    // Set HTTP-only cookie
+    response.cookies.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("Signup error:", error);
 

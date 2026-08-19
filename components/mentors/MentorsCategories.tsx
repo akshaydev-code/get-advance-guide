@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MaxWidthWrapper from "../common/MaxWidthWrapper/MaxWidthWrapper";
 import {
     LayoutGrid,
@@ -10,7 +10,10 @@ import {
     Megaphone,
     Briefcase,
     UserRound,
-    MoreHorizontal,
+    Smartphone,
+    Cloud,
+    Cpu,
+    Shield,
 } from "lucide-react";
 
 const MentorCategoriesData = [
@@ -40,39 +43,86 @@ const MentorCategoriesData = [
     },
     {
         icon: <UserRound size={18} />,
-        text: "Career Coaching",
+        text: "Career Guidance",
     },
     {
-        icon: <MoreHorizontal size={18} />,
-        text: "More",
+        icon: <Smartphone size={18} />,
+        text: "App Development",
     },
-]
+    {
+        icon: <Cloud size={18} />,
+        text: "Cloud Computing",
+    },
+    {
+        icon: <Cpu size={18} />,
+        text: "AI & Machine Learning",
+    },
+    {
+        icon: <Shield size={18} />,
+        text: "Cyber Security",
+    },
+];
 
 const MentorsCategories = () => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
+
+    useEffect(() => {
+        const handleFilterChange = (event: Event) => {
+            const customEvent = event as CustomEvent<{ category?: string }>;
+            if (customEvent.detail?.category !== undefined) {
+                const cat = customEvent.detail.category;
+                const idx = MentorCategoriesData.findIndex(
+                    (c) => c.text.toLowerCase() === (cat || "All Categories").toLowerCase()
+                );
+                if (idx !== -1) {
+                    setActiveIndex(idx);
+                }
+            }
+        };
+
+        window.addEventListener("mentorsFilterChange", handleFilterChange);
+        return () => window.removeEventListener("mentorsFilterChange", handleFilterChange);
+    }, []);
+
+    const handleSelectCategory = (index: number) => {
+        setActiveIndex(index);
+        const catName = MentorCategoriesData[index].text;
+        const event = new CustomEvent("mentorsFilterChange", {
+            detail: {
+                category: catName === "All Categories" ? "" : catName,
+            },
+        });
+        window.dispatchEvent(event);
+
+        const target = document.getElementById("mentors-list-section");
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+        }
+    };
 
     return (
         <div>
             <MaxWidthWrapper>
                 <div className="pt-9 mt-11">
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 justify-center">
                         {MentorCategoriesData?.map((item, index) => (
                             <div
                                 key={index}
-                                onClick={() => setActiveIndex(index)}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-[11px] border font-semibold cursor-pointer mx-auto
-                                    ${index === activeIndex
-                                        ? "bg-violet-50 border-violet-300"
-                                        : "bg-white border-"
-                                    }`}
+                                onClick={() => handleSelectCategory(index)}
+                                className={`flex items-center gap-2 px-3.5 py-2 rounded-[11px] border font-semibold cursor-pointer transition-all duration-200 ${
+                                    index === activeIndex
+                                        ? "bg-violet-50 border-violet-300 shadow-xs"
+                                        : "bg-white border-gray-200 hover:border-violet-200 hover:bg-violet-50/40"
+                                }`}
                             >
-                                <p className="text-[12px] text-violet-600">
+                                <div className={index === activeIndex ? "text-violet-600" : "text-gray-500"}>
                                     {item.icon}
-                                </p>
-                                <span className={`text-[13px]
-                                    ${index === activeIndex
-                                        ? "text-violet-600"
-                                        : "text-gray-600"
+                                </div>
+                                <span
+                                    className={`text-[13px] ${
+                                        index === activeIndex
+                                            ? "text-violet-600 font-semibold"
+                                            : "text-gray-600 font-medium"
                                     }`}
                                 >
                                     {item.text}
@@ -83,7 +133,7 @@ const MentorsCategories = () => {
                 </div>
             </MaxWidthWrapper>
         </div>
-    )
-}
+    );
+};
 
 export default MentorsCategories;

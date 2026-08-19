@@ -1,458 +1,427 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import {
-  Search,
-  Filter,
-  ArrowRight,
-  ChevronRight,
-  Download,
-  Play,
-  FileText,
-  Compass,
-  BookOpen,
-  Video,
-  Layers,
-  Star,
-  Mail,
-  Phone,
-  //   ExternalLink,
-  //   Facebook,
-  //   Twitter,
-  //   Linkedin,
-  //   Instagram
+  Search, Filter, ArrowRight, ChevronRight, Download,
+  Play, FileText, Compass, BookOpen, Video, Layers,
+  Star, Heart, Bookmark, Sparkles, CheckCircle2,
+  ExternalLink, Users, Eye, Clock, ShieldCheck
 } from 'lucide-react';
+import Link from 'next/link';
 import MaxWidthWrapper from '@/components/common/MaxWidthWrapper/MaxWidthWrapper';
 
+// Types & Seed Data
+import { ResourceItem, ResourceCategory, ResourceType, ResourceLevel } from '@/components/resources/types';
+import { initialResourcesData } from '@/components/resources/data/resourcesData';
+
+// Modular Cards
+import ResourceCard from '@/components/resources/components/ResourceCard';
+import RoadmapCard from '@/components/resources/components/RoadmapCard';
+import DownloadCard from '@/components/resources/components/DownloadCard';
+import VideoCard from '@/components/resources/components/VideoCard';
+
+// Modals
+import ReadResourceModal from '@/components/resources/modals/ReadResourceModal';
+import VideoPlayerModal from '@/components/resources/modals/VideoPlayerModal';
+import RoadmapDetailModal from '@/components/resources/modals/RoadmapDetailModal';
+
 export default function ResourceHubPage() {
+  const [resources, setResources] = useState<ResourceItem[]>(initialResourcesData);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<ResourceCategory>('All');
+  const [selectedType, setSelectedType] = useState<ResourceType | 'All'>('All');
+  const [selectedLevel, setSelectedLevel] = useState<ResourceLevel>('All');
+
+  // Bookmarks & Likes stored in localStorage
+  const [likedIds, setLikedIds] = useState<string[]>([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+
+  // Active Modals
+  const [activeReadResource, setActiveReadResource] = useState<ResourceItem | null>(null);
+  const [activeVideoResource, setActiveVideoResource] = useState<ResourceItem | null>(null);
+  const [activeRoadmapResource, setActiveRoadmapResource] = useState<ResourceItem | null>(null);
+
+  useEffect(() => {
+    try {
+      const savedLikes = localStorage.getItem('gag_resources_likes');
+      if (savedLikes) setLikedIds(JSON.parse(savedLikes));
+
+      const savedBookmarks = localStorage.getItem('gag_resources_bookmarks');
+      if (savedBookmarks) setBookmarkedIds(JSON.parse(savedBookmarks));
+    } catch {}
+  }, []);
+
+  const handleToggleLike = (resourceId: string) => {
+    setLikedIds((prev) => {
+      const updated = prev.includes(resourceId)
+        ? prev.filter((id) => id !== resourceId)
+        : [...prev, resourceId];
+      try {
+        localStorage.setItem('gag_resources_likes', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const handleToggleBookmark = (resourceId: string) => {
+    setBookmarkedIds((prev) => {
+      const updated = prev.includes(resourceId)
+        ? prev.filter((id) => id !== resourceId)
+        : [...prev, resourceId];
+      try {
+        localStorage.setItem('gag_resources_bookmarks', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const handleOpenResource = (item: ResourceItem) => {
+    if (item.type === 'Video') {
+      setActiveVideoResource(item);
+    } else if (item.type === 'Roadmap' && item.milestones) {
+      setActiveRoadmapResource(item);
+    } else {
+      setActiveReadResource(item);
+    }
+  };
+
+  // Filtered Logic
+  const filteredResources = resources.filter((res) => {
+    const matchesSearch =
+      res.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      res.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      res.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      res.author.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory = selectedCategory === 'All' || res.category === selectedCategory;
+    const matchesType = selectedType === 'All' || res.type === selectedType;
+    const matchesLevel = selectedLevel === 'All' || res.level === selectedLevel;
+
+    return matchesSearch && matchesCategory && matchesType && matchesLevel;
+  });
+
+  const featuredResources = resources.filter((r) => r.isFeatured);
+  const roadmaps = resources.filter((r) => r.type === 'Roadmap');
+  const downloads = resources.filter((r) => r.type === 'Template' || r.type === 'Cheatsheet' || r.downloadFileName);
+  const videoResources = resources.filter((r) => r.type === 'Video');
+
+  const categoriesList: { name: ResourceCategory; icon: string; count: number }[] = [
+    { name: 'All', icon: '🌟', count: resources.length },
+    { name: 'Web Development', icon: '💻', count: resources.filter((r) => r.category === 'Web Development').length },
+    { name: 'System Design', icon: '🏗️', count: resources.filter((r) => r.category === 'System Design').length },
+    { name: 'Data Science', icon: '📊', count: resources.filter((r) => r.category === 'Data Science').length },
+    { name: 'UI/UX Design', icon: '🎨', count: resources.filter((r) => r.category === 'UI/UX Design').length },
+    { name: 'Career & Interviews', icon: '🎯', count: resources.filter((r) => r.category === 'Career & Interviews').length },
+  ];
+
   return (
-    <MaxWidthWrapper>
-      <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans selection:bg-purple-600 selection:text-white">
+      {/* ===================== HERO SECTION ===================== */}
+      <section className="relative overflow-hidden pt-8 pb-16 bg-gradient-to-b from-purple-50/70 via-white to-[#F8FAFC]">
+        <MaxWidthWrapper>
+          <div className="bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-800 rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl shadow-violet-200">
+            <div className="absolute -right-10 -bottom-10 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute right-40 -top-10 w-72 h-72 bg-violet-400/20 rounded-full blur-3xl pointer-events-none" />
 
-        {/* 1. NAVBAR */}
-        {/* <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-black text-xl px-3 py-1.5 rounded-lg shadow-md flex items-center gap-1">
-              <span>AG</span>
-            </div>
-            <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-900 to-purple-900 bg-clip-text text-transparent">
-              GetAdvanceGuide
-            </span>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#" className="hover:text-purple-600 transition-colors">Home</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Mentors</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">How It Works</a>
-            <a href="#" className="text-purple-600 font-semibold relative after:absolute after:bottom-[-22px] after:left-0 after:w-full after:h-[2px] after:bg-purple-600">Resources</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">About Us</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Contact</a>
-          </nav>
-
-          <div className="flex items-center gap-4">
-            <button className="text-sm font-semibold text-purple-600 hover:text-purple-700 px-4 py-2">
-              Login
-            </button>
-            <button className="text-sm font-semibold bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-purple-600/20 transition-all">
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </header> */}
-
-        {/* 2. HERO SECTION */}
-        <section className="relative overflow-hidden pt-8 pb-16 bg-gradient-to-b from-purple-50/50 to-white">
-          <div className="">
-
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold mb-6">
-              ✨ Resources
-            </div>
-
-            <div className="grid lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-7 space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
-                  Your Ultimate Learning & Career <span className="text-purple-600">Resource Hub</span>
-                </h1>
-                <p className="text-slate-600 text-base sm:text-lg max-w-xl leading-relaxed">
-                  Explore high-quality articles, guides, templates, roadmaps, videos and tools to help you learn, grow and achieve your career goals.
-                </p>
-
-                {/* Search Bar */}
-                <div className="flex items-center gap-3 max-w-xl">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search resources..."
-                      className="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 shadow-sm"
-                    />
-                  </div>
-                  <button className="flex items-center gap-2 px-6 py-3.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-2xl shadow-sm transition-all">
-                    <Filter className="w-4 h-4 text-slate-500" /> Filter
-                  </button>
-                </div>
-
-                {/* Stats Badges */}
-                <div className="flex flex-wrap gap-4 pt-4">
-                  {[
-                    { label: "500+ Articles", icon: BookOpen },
-                    { label: "200+ Guides", icon: FileText },
-                    { label: "100+ Templates", icon: Layers },
-                    { label: "50+ Videos", icon: Video },
-                    { label: "20+ Roadmaps", icon: Compass },
-                  ].map((stat, i) => (
-                    <div key={i} className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-slate-200/80 shadow-sm text-xs font-semibold text-slate-700">
-                      <stat.icon className="w-4 h-4 text-purple-600" />
-                      <span>{stat.label}</span>
-                    </div>
-                  ))}
-                </div>
+            <div className="relative z-10 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-violet-100 text-xs font-semibold mb-4 border border-white/20">
+                <Sparkles size={14} className="text-amber-300" />
+                <span>Curated by Google, Meta & Amazon Engineering Mentors</span>
               </div>
 
-              {/* Hero Right Visual Graphic */}
-              <div className="lg:col-span-5 relative hidden lg:flex justify-center">
-                <div className="w-full bg-gradient-to-tr from-purple-100/70 to-indigo-100/70 rounded-3xl p-8 border border-purple-200/50 shadow-lg text-center relative min-h-[320px] flex flex-col items-center justify-center">
-                  <div className="absolute top-6 left-6 bg-white px-3 py-1.5 rounded-xl shadow text-xs font-bold text-purple-700">Articles</div>
-                  <div className="absolute top-6 right-6 bg-white px-3 py-1.5 rounded-xl shadow text-xs font-bold text-indigo-700">Guides</div>
-                  <div className="absolute bottom-6 left-6 bg-white px-3 py-1.5 rounded-xl shadow text-xs font-bold text-blue-700">Templates</div>
-                  <div className="absolute bottom-6 right-6 bg-white px-3 py-1.5 rounded-xl shadow text-xs font-bold text-emerald-700">Roadmaps</div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight mb-4">
+                Engineering Roadmaps, Interview Guides & Cheatsheets
+              </h1>
 
-                  <div className="w-20 h-20 bg-purple-600 text-white rounded-2xl flex items-center justify-center shadow-xl mb-4 text-3xl font-bold">
-                    👩‍💻
-                  </div>
-                  <div className="font-bold text-slate-800 text-sm">Empowering Your Growth Journey</div>
-                </div>
-              </div>
+              <p className="text-violet-100 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl font-medium">
+                Accelerate your technical career with verified system design blueprints, modern web roadmaps, and ATS resume templates prepared by industry leaders.
+              </p>
 
-            </div>
-          </div>
-        </section>
-
-        {/* 3. BROWSE BY CATEGORIES */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Browse by <span className="text-purple-600">Categories</span>
-            </h2>
-            <button className="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1">
-              View all categories <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: "Resume", links: ["Templates", "ATS Tips", "Portfolio"], icon: FileText },
-              // { title: "Interview", links: ["HR Questions", "Technical Q&A", "Behavioral"], icon: UsersIcon = () => <Users className="w-5 h-5 text-purple-600" /> },
-              { title: "Career", links: ["Career Advice", "Salary Guide", "Promotion Tips"], icon: Compass },
-              { title: "Skills", links: ["Soft Skills", "Technical Skills", "Certifications"], icon: Layers },
-              { title: "College", links: ["Placements", "Internships", "Higher Studies"], icon: BookOpen },
-              { title: "Productivity", links: ["Time Management", "Study Tips", "Goal Setting"], icon: Star },
-            ].map((cat, i) => (
-              <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-purple-300 transition-all space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 font-bold">
-                    📁
-                  </div>
-                  <h3 className="font-bold text-lg text-slate-900">{cat.title}</h3>
-                </div>
-                <ul className="space-y-2 pt-2 border-t border-slate-100">
-                  {cat.links.map((link, idx) => (
-                    <li key={idx} className="flex items-center justify-between text-sm text-slate-600 hover:text-purple-600 cursor-pointer font-medium py-1">
-                      <span>{link}</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                    </li>
-                  ))}
-                </ul>
-                <div className="pt-2">
-                  <span className="text-xs font-bold text-purple-600 cursor-pointer hover:underline">Explore &rarr;</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 4. FEATURED RESOURCES */}
-        <section className="py-16 bg-slate-50/50 border-y border-slate-200/60">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-10">
-              <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-                Featured <span className="text-purple-600">Resources</span>
-              </h2>
-              <button className="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1">
-                View all resources <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { type: "GUIDE", title: "Resume Writing Complete Guide", desc: "Step-by-step guide to create an ATS-friendly resume that gets you noticed.", time: "8 min read", badgeBg: "bg-purple-100 text-purple-700" },
-                { type: "ROADMAP", title: "Frontend Developer Roadmap 2024", desc: "Complete roadmap to become a frontend developer in 2024.", time: "12 min read", badgeBg: "bg-blue-100 text-blue-700" },
-                { type: "CHECKLIST", title: "Interview Preparation Checklist", desc: "Download the ultimate checklist to crack any interview.", time: "6 min read", badgeBg: "bg-emerald-100 text-emerald-700" },
-                { type: "GUIDE", title: "LinkedIn Profile Optimization", desc: "Optimize your LinkedIn profile and attract the right opportunities.", time: "7 min read", badgeBg: "bg-purple-100 text-purple-700" },
-                { type: "TEMPLATE", title: "Resume Template (ATS Friendly)", desc: "Professional resume template for all job roles.", time: "PDF", badgeBg: "bg-amber-100 text-amber-700" },
-                { type: "VIDEO", title: "Mock Interview Session", desc: "Watch expert-led mock interview sessions and improve your skills.", time: "18 min", badgeBg: "bg-indigo-100 text-indigo-700" },
-              ].map((res, i) => (
-                <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition-all">
-                  <div className="space-y-3">
-                    <span className={`inline-block text-[10px] font-bold px-2.5 py-1 rounded-full ${res.badgeBg}`}>
-                      {res.type}
-                    </span>
-                    <h3 className="font-bold text-base text-slate-900">{res.title}</h3>
-                    <p className="text-slate-500 text-xs leading-relaxed">{res.desc}</p>
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 text-xs text-slate-500">
-                    <span>{res.time}</span>
-                    <button className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center hover:bg-purple-600 hover:text-white transition-colors">
-                      <Download className="w-3.5 h-3.5" />
+              {/* Real-time Search Input */}
+              <div className="bg-white p-2 rounded-2xl shadow-xl flex flex-col sm:flex-row items-center gap-2 max-w-2xl">
+                <div className="relative flex-grow w-full">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                  <input
+                    type="text"
+                    placeholder="Search guides by title, technology (e.g. Next.js, Redis), or author..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-transparent pl-11 pr-4 py-3 text-xs md:text-sm text-gray-800 font-medium focus:outline-none placeholder-gray-400"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 hover:text-gray-700"
+                    >
+                      Clear
                     </button>
-                  </div>
+                  )}
                 </div>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <select
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value as any)}
+                    className="w-full sm:w-auto bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold py-3 px-3.5 rounded-xl focus:ring-2 focus:ring-violet-500 cursor-pointer"
+                  >
+                    <option value="All">All Types</option>
+                    <option value="Guide">Guides</option>
+                    <option value="Roadmap">Roadmaps</option>
+                    <option value="Cheatsheet">Cheatsheets</option>
+                    <option value="Template">Templates</option>
+                    <option value="Video">Videos</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Quick Stat Highlights */}
+              <div className="flex flex-wrap items-center gap-4 pt-6 text-xs text-violet-100 font-semibold">
+                <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-xl backdrop-blur-xs">
+                  <BookOpen size={14} className="text-amber-300" /> {resources.length} Verified Resources
+                </span>
+                <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-xl backdrop-blur-xs">
+                  <Download size={14} className="text-emerald-300" /> 20,000+ Downloads
+                </span>
+                <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-xl backdrop-blur-xs">
+                  <ShieldCheck size={14} className="text-sky-300" /> 100% Free & Open Access
+                </span>
+              </div>
+            </div>
+          </div>
+        </MaxWidthWrapper>
+      </section>
+
+      {/* ===================== CATEGORY PILLS BAR ===================== */}
+      <section className="py-4 bg-white border-b border-gray-100 sticky top-16 z-10 shadow-xs">
+        <MaxWidthWrapper>
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
+            {categoriesList.map((cat) => {
+              const isSelected = selectedCategory === cat.name;
+              return (
+                <button
+                  key={cat.name}
+                  onClick={() => setSelectedCategory(cat.name)}
+                  className={`px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                    isSelected
+                      ? 'bg-violet-600 text-white shadow-md shadow-violet-200'
+                      : 'bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 border border-gray-100'
+                  }`}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.name}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${isSelected ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-600'}`}>
+                    {cat.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </MaxWidthWrapper>
+      </section>
+
+      {/* ===================== MAIN FILTERED RESULTS GRID ===================== */}
+      <section className="py-12">
+        <MaxWidthWrapper>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+              <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                {selectedCategory === 'All' ? 'All Learning Resources' : `${selectedCategory} Guides`}
+              </h2>
+              <p className="text-xs text-gray-500 font-medium mt-0.5">
+                Showing {filteredResources.length} items • Click any card to read, watch, or download.
+              </p>
+            </div>
+
+            {/* Level Filter */}
+            <div className="flex items-center gap-1.5 bg-white p-1 rounded-2xl border border-gray-200/80 shadow-xs w-fit">
+              {(['All', 'Beginner', 'Intermediate', 'Advanced'] as const).map((lvl) => (
+                <button
+                  key={lvl}
+                  onClick={() => setSelectedLevel(lvl)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    selectedLevel === lvl
+                      ? 'bg-violet-600 text-white shadow-xs'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  {lvl}
+                </button>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* 5. POPULAR CAREER ROADMAPS */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Popular Career <span className="text-purple-600">Roadmaps</span>
-            </h2>
-            <button className="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1">
-              View all roadmaps <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: "Full Stack Developer", duration: "12-18 Months", skills: "25+ Skills" },
-              { title: "Data Scientist", duration: "10-14 Months", skills: "20+ Skills" },
-              { title: "AI & ML Engineer", duration: "12-16 Months", skills: "30+ Skills" },
-              { title: "DevOps Engineer", duration: "8-12 Months", skills: "20+ Skills" },
-              { title: "Cyber Security Analyst", duration: "10-14 Months", skills: "25+ Skills" },
-              { title: "UI/UX Designer", duration: "6-10 Months", skills: "15+ Skills" },
-            ].map((roadmap, i) => (
-              <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 hover:border-purple-300 transition-all">
-                <h3 className="font-bold text-lg text-slate-900">{roadmap.title}</h3>
-                <div className="space-y-1.5 text-xs text-slate-500 font-medium">
-                  <div>⏱ {roadmap.duration}</div>
-                  <div>🛠 {roadmap.skills}</div>
-                </div>
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-bold text-purple-600 cursor-pointer">Explore roadmap</span>
-                  <ChevronRight className="w-4 h-4 text-purple-600" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 6. TOP DOWNLOADS & VIDEO RESOURCES */}
-        <section className="py-16 bg-slate-50/50 border-y border-slate-200/60">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12">
-
-            {/* Top Downloads */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-lg text-slate-900">Top Downloads & Templates</h3>
-                <span className="text-xs text-purple-600 font-semibold cursor-pointer">View all downloads</span>
-              </div>
-              <div className="space-y-3">
-                {[
-                  { title: "Resume Template (ATS Friendly)", desc: "Professional resume template for all job roles." },
-                  { title: "Interview Questions PDF", desc: "Top 100 HR & Technical interview questions." },
-                  { title: "Placement Preparation Planner", desc: "Plan your placement preparation effectively." },
-                  { title: "Goal Tracking Worksheet", desc: "Track your goals and achieve success." },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <div className="space-y-0.5">
-                      <h4 className="font-bold text-xs text-slate-900">{item.title}</h4>
-                      <p className="text-[11px] text-slate-500">{item.desc}</p>
-                    </div>
-                    <button className="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow">
-                      <Download className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Video Resources */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-lg text-slate-900">Video Resources</h3>
-                <span className="text-xs text-purple-600 font-semibold cursor-pointer">View all videos</span>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { title: "Resume Review By Industry Expert", time: "24 min" },
-                  { title: "Mock Interview Full Session", time: "32 min" },
-                  { title: "LinkedIn Profile Optimization", time: "18 min" },
-                  { title: "Career Roadmap Explained", time: "16 min" },
-                ].map((vid, i) => (
-                  <div key={i} className="space-y-2">
-                    <div className="h-28 bg-slate-200 rounded-xl relative flex items-center justify-center text-white">
-                      <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shadow">
-                        <Play className="w-3.5 h-3.5 fill-white" />
-                      </div>
-                    </div>
-                    <h4 className="font-bold text-xs text-slate-900 truncate">{vid.title}</h4>
-                    <p className="text-[10px] text-slate-400">{vid.time}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* 7. MENTOR TIPS FOR YOU */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Mentor <span className="text-purple-600">Tips for You</span>
-            </h2>
-            <button className="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1">
-              View all tips <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {[
-              { quote: "Build projects, not just certificates. Real skills matter more.", author: "Arjun Sharma", role: "Senior Software Engineer" },
-              { quote: "Practice interviews regularly. Consistency builds confidence.", author: "Neha Kapoor", role: "Product Manager" },
-              { quote: "Keep learning and stay updated with industry trends.", author: "Vikram Singh", role: "Tech Lead" },
-              { quote: "A strong LinkedIn profile can open many doors for you.", author: "Pooja Verma", role: "HR Manager" },
-              { quote: "Focus on solving real problems and creating impact.", author: "Rahul Mehta", role: "Founder & Mentor" },
-            ].map((tip, i) => (
-              <div key={i} className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4">
-                <p className="text-xs text-slate-600 italic leading-relaxed">{tip.quote}</p>
-                <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <div className="w-7 h-7 bg-purple-100 rounded-full flex items-center justify-center text-xs font-bold text-purple-700">👤</div>
-                  <div>
-                    <h4 className="font-bold text-[11px] text-slate-900">{tip.author}</h4>
-                    <p className="text-[9px] text-slate-400">{tip.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 8. NEWSLETTER BANNER */}
-        <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-900 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-3 max-w-xl z-10 text-center md:text-left">
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Stay Updated with Latest Resources</h2>
-              <p className="text-purple-200 text-xs sm:text-sm leading-relaxed">
-                Subscribe to our newsletter and get weekly updates on new articles, guides, templates, roadmaps and more.
+          {filteredResources.length === 0 ? (
+            <div className="bg-white rounded-[2.5rem] p-16 text-center border border-gray-100 shadow-sm space-y-3">
+              <BookOpen size={48} className="mx-auto text-gray-300" />
+              <h3 className="text-lg font-bold text-gray-900">No resources match your search</h3>
+              <p className="text-xs text-gray-500 max-w-sm mx-auto">
+                Try clearing your search terms or picking another category.
               </p>
-            </div>
-            <div className="flex items-center gap-2 w-full md:w-auto z-10">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-3 bg-white/10 border border-purple-300/30 rounded-xl text-sm placeholder:text-purple-200 text-white focus:outline-none focus:ring-2 focus:ring-white w-full sm:w-72"
-              />
-              <button className="bg-white text-purple-900 hover:bg-purple-50 font-bold text-sm px-6 py-3 rounded-xl shadow transition-all shrink-0">
-                Subscribe
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('All');
+                  setSelectedType('All');
+                  setSelectedLevel('All');
+                }}
+                className="px-5 py-2.5 bg-violet-600 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer hover:bg-violet-700"
+              >
+                Reset All Filters
               </button>
             </div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredResources.map((res) => (
+                <ResourceCard
+                  key={res.id}
+                  resource={res}
+                  isLiked={likedIds.includes(res.id)}
+                  isBookmarked={bookmarkedIds.includes(res.id)}
+                  onOpen={handleOpenResource}
+                  onToggleLike={handleToggleLike}
+                  onToggleBookmark={handleToggleBookmark}
+                />
+              ))}
+            </div>
+          )}
+        </MaxWidthWrapper>
+      </section>
+
+      {/* ===================== POPULAR CAREER ROADMAPS SPOTLIGHT ===================== */}
+      {roadmaps.length > 0 && (
+        <section className="py-16 bg-white border-y border-gray-100">
+          <MaxWidthWrapper>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-violet-50 text-violet-700 px-3 py-1 rounded-full border border-violet-100">
+                    Interactive Milestones 🗺️
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight mt-2">
+                  Popular Career <span className="text-violet-600">Roadmaps</span>
+                </h2>
+                <p className="text-xs text-gray-500 font-medium mt-1">
+                  Track your progression milestone by milestone with interactive checkboxes.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {roadmaps.map((r) => (
+                <RoadmapCard
+                  key={r.id}
+                  roadmap={r}
+                  onOpen={handleOpenResource}
+                />
+              ))}
+            </div>
+          </MaxWidthWrapper>
         </section>
+      )}
 
-        {/* 9. DETAILED FOOTER */}
-        {/* <footer className="bg-slate-50 border-t border-slate-200/80 pt-16 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200/60">
-          
-         
-          <div className="space-y-4 lg:col-span-1">
-            <div className="flex items-center gap-2">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-black text-lg px-2.5 py-1 rounded-lg">
-                AG
+      {/* ===================== TOP DOWNLOADS & VIDEO RESOURCES 2-COL ===================== */}
+      <section className="py-16 bg-[#F8FAFC]">
+        <MaxWidthWrapper>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left Col (6 cols): Top Downloads */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-extrabold text-gray-900 text-xl">Top Downloads & Cheatsheets</h3>
+                  <p className="text-xs text-gray-500 font-medium">1-click instant PDF and template downloads</p>
+                </div>
               </div>
-              <span className="font-bold text-base text-slate-900">GetAdvanceGuide</span>
+
+              <div className="space-y-3">
+                {downloads.slice(0, 4).map((d) => (
+                  <DownloadCard
+                    key={d.id}
+                    item={d}
+                    onOpen={handleOpenResource}
+                  />
+                ))}
+              </div>
             </div>
-            <p className="text-slate-500 text-xs leading-relaxed">
-              Empowering learners through mentorship, resources and guidance to achieve their goals and unlock their potential.
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Facebook className="w-3.5 h-3.5" /></div>
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Twitter className="w-3.5 h-3.5" /></div>
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Linkedin className="w-3.5 h-3.5" /></div>
-              <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-sm cursor-pointer"><Instagram className="w-3.5 h-3.5" /></div>
-            </div>
-          </div>
 
-         
-          <div className="space-y-3">
-            <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Blogs</h4>
-            <ul className="space-y-2 text-xs text-slate-600">
-              <li><a href="#" className="hover:text-purple-600">Career Advice</a></li>
-              <li><a href="#" className="hover:text-purple-600">Interview Tips</a></li>
-              <li><a href="#" className="hover:text-purple-600">Resume Tips</a></li>
-              <li><a href="#" className="hover:text-purple-600">Industry Insights</a></li>
-              <li><a href="#" className="hover:text-purple-600">Technical Blogs</a></li>
-            </ul>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Guides</h4>
-            <ul className="space-y-2 text-xs text-slate-600">
-              <li><a href="#" className="hover:text-purple-600">Resume Guide</a></li>
-              <li><a href="#" className="hover:text-purple-600">Interview Guide</a></li>
-              <li><a href="#" className="hover:text-purple-600">Career Guide</a></li>
-              <li><a href="#" className="hover:text-purple-600">LinkedIn Guide</a></li>
-              <li><a href="#" className="hover:text-purple-600">Salary Guide</a></li>
-            </ul>
-          </div>
-
-
-          <div className="space-y-3">
-            <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">GAQ</h4>
-            <ul className="space-y-2 text-xs text-slate-600">
-              <li><a href="#" className="hover:text-purple-600">General Questions</a></li>
-              <li><a href="#" className="hover:text-purple-600">Booking & Sessions</a></li>
-              <li><a href="#" className="hover:text-purple-600">Payments</a></li>
-              <li><a href="#" className="hover:text-purple-600">Mentorship</a></li>
-              <li><a href="#" className="hover:text-purple-600">Account Help</a></li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="font-bold text-xs text-slate-900 uppercase tracking-wider">Help Center</h4>
-            <ul className="space-y-2 text-xs text-slate-600 pb-2">
-              <li><a href="#" className="hover:text-purple-600">Getting Started</a></li>
-              <li><a href="#" className="hover:text-purple-600">Account & Profile</a></li>
-              <li><a href="#" className="hover:text-purple-600">Payments & Refunds</a></li>
-            </ul>
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm space-y-2">
-              <h5 className="font-bold text-xs text-slate-900">Need Help?</h5>
-              <p className="text-[10px] text-slate-500">We are here to help you out!</p>
-              <div className="text-[11px] text-slate-700 font-medium flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-purple-600" /> support@getadvanceguide.com
+            {/* Right Col (6 cols): Video Masterclasses */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-extrabold text-gray-900 text-xl">Video Masterclasses</h3>
+                  <p className="text-xs text-gray-500 font-medium">Recorded mock technical interviews and walkthroughs</p>
+                </div>
               </div>
-              <div className="text-[11px] text-slate-700 font-medium flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-purple-600" /> +91 98765 43210
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {videoResources.map((v) => (
+                  <VideoCard
+                    key={v.id}
+                    video={v}
+                    onOpen={handleOpenResource}
+                  />
+                ))}
               </div>
-              <button className="w-full mt-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs py-2 rounded-xl shadow">
-                Contact Us
-              </button>
             </div>
           </div>
+        </MaxWidthWrapper>
+      </section>
 
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <div>© 2024 GetAdvanceGuide. All rights reserved.</div>
-          <div className="flex items-center gap-6">
-            <a href="#" className="hover:underline">Privacy Policy</a>
-            <a href="#" className="hover:underline">Terms of Service</a>
-            <a href="#" className="hover:underline">Refund Policy</a>
+      {/* ===================== MENTORSHIP COMMUNITY CTA ===================== */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <MaxWidthWrapper>
+          <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-800 rounded-[2.5rem] p-8 md:p-12 text-white text-center relative overflow-hidden shadow-xl shadow-violet-200">
+            <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+              <span className="text-[10px] font-bold tracking-wider uppercase bg-white/20 px-3 py-1 rounded-full">
+                Accelerate Your Preparation
+              </span>
+              <h2 className="text-2xl md:text-4xl font-black tracking-tight leading-tight">
+                Want 1-on-1 Guidance on These Roadmaps?
+              </h2>
+              <p className="text-violet-100 text-xs md:text-sm font-medium leading-relaxed max-w-xl mx-auto">
+                Connect directly with the engineers from Google, Nvidia, Meta, and Microsoft who authored these resources for mock interviews, resume critiques, and architecture deep dives.
+              </p>
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/mentors"
+                  className="px-6 py-3 bg-white text-violet-700 hover:bg-violet-50 rounded-2xl font-bold text-xs shadow-lg shadow-violet-950/20 transition-all hover:scale-105"
+                >
+                  Explore Verified Mentors
+                </Link>
+                <Link
+                  href="/become-a-mentor"
+                  className="px-6 py-3 bg-white/15 hover:bg-white/25 text-white rounded-2xl font-bold text-xs border border-white/20 transition-all"
+                >
+                  Become a Mentor
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </footer> */}
+        </MaxWidthWrapper>
+      </section>
 
-      </div>
-    </MaxWidthWrapper>
+      {/* ===================== GLOBAL MODALS ===================== */}
+      <ReadResourceModal
+        isOpen={!!activeReadResource}
+        resource={activeReadResource}
+        isLiked={activeReadResource ? likedIds.includes(activeReadResource.id) : false}
+        isBookmarked={activeReadResource ? bookmarkedIds.includes(activeReadResource.id) : false}
+        onClose={() => setActiveReadResource(null)}
+        onToggleLike={handleToggleLike}
+        onToggleBookmark={handleToggleBookmark}
+      />
+
+      <VideoPlayerModal
+        isOpen={!!activeVideoResource}
+        resource={activeVideoResource}
+        onClose={() => setActiveVideoResource(null)}
+      />
+
+      <RoadmapDetailModal
+        isOpen={!!activeRoadmapResource}
+        resource={activeRoadmapResource}
+        onClose={() => setActiveRoadmapResource(null)}
+      />
+    </div>
   );
 }
